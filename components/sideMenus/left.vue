@@ -1,8 +1,20 @@
 <script setup>
     const user = useSupabaseUser();
-
+    const supabase = useSupabaseClient()
     const userAvatar = user.value.user_metadata.avatar_url || 1;
     const userNickname = user.value.user_metadata.nickname || 1;
+
+
+const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    await navigateTo('/login');
+};
 </script>
 
 <template>
@@ -13,6 +25,7 @@
             <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt="">Пользователи</NuxtLink>
             <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt="">Настройки</NuxtLink>
             <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span>Профиль</NuxtLink>
+            <p @click="logout" id="logout" class="leftNav"> Выйти</p>
         </div>
     </div>
 </template>
@@ -37,6 +50,7 @@
         }
         #leftBarMenu {
             .leftNav {
+                cursor: pointer;
                 user-select: none;
                 display: flex;
                 font-size: 20px;

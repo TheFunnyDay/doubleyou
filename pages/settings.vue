@@ -1,7 +1,7 @@
 <script setup>
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
-console.log(user.value)
+
 const { data: profile } = await useAsyncData('profiles', async () => {
     const { data } = await supabase.from('profiles')
         .select(`
@@ -14,9 +14,27 @@ const { data: profile } = await useAsyncData('profiles', async () => {
     return data;
 });
 
-// const { data, error } = await supabase.auth.updateUser({
-//   data: { avatar_url: 'https://media.tenor.com/pBAFPxVlpmgAAAAd/cat.gif' }
-// })
+const userNickname = ref(user.value.user_metadata.nickname);
+const userFullname  = ref(user.value.user_metadata.fullname);
+const userAvatar = ref(user.value.user_metadata.avatar_url);
+const userCover = ref(user.value.user_metadata.cover_url || null);
+
+const handleUserMetaUpdate = async () => {
+    try {
+            const { data, error } = await supabase.auth.updateUser({
+        data: {
+            fullname: userFullname.value,
+            nickname: userNickname.value,
+            avatar_url: userAvatar.value,
+            cover_url: userCover.value
+        }
+    })
+    if (error) throw error 
+    alert('Данные успешно изменены')
+    } catch (error) {
+        alert(error.error_description || error.message)
+    }
+}
 
 // console.log(user.value)
 </script>
@@ -30,17 +48,22 @@ const { data: profile } = await useAsyncData('profiles', async () => {
             <div class="main-margin" id="profile-setting">
                 <div id="user-avatar-setting">
                     <div id="user-avatar" :style="'background-image: url(' + profile.avatar_url + ')'"></div>
-                    <p class="button main-margin">Сменить</p>
                 </div>
                 <div style="width:65%;">
-                    <form>
+                    <form @submit="handleUserMetaUpdate">
                         <p>ФИО</p>
-                        <input type="text" name="" id="" class="main-input" value="expemple">
+                        <input type="text" name="" v-model="userFullname" class="main-input" />
                         <p class="main-margin">Никнейм</p>
-                        <input type="text" name="" id="" class="main-input" value="expemple">
+                        <input type="text" name="" v-model="userNickname" class="main-input" />
                         <p class="main-margin">Почта</p>
-                        <input type="email" name="" id="" class="main-input" value="expemple@example.com">
+                        <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/>
+                        <p class="main-margin">Аватарка</p>
+                        <input type="text" name="" v-model="userAvatar" class="main-input" />
+                        <p class="main-margin">Обожка</p>
+                        <input type="text" name="" v-model="userCover" class="main-input" />
+                        <input type="submit" value="Сохранить" class="button main-margin">
                     </form>
+                        
                 </div>
             </div>
         </div>

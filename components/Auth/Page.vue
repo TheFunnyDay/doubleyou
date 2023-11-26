@@ -7,7 +7,7 @@ const password = ref('');
 const avatar_url = ref('https://i.pinimg.com/236x/10/c5/43/10c543516e4c1a6528c90edbc7676a0c.jpg')
 const fullname = ref('')
 const nickname = ref('')
-
+const cover_url = ref('https://i.ibb.co/Z27gLm5/hbc-Fz-Xk-F6-HJ2-model-Name-model-Version-dreamlike-art.png')
 // watchEffect(() => {
 //     if (user.value) {
 //         router.push('/');
@@ -25,7 +25,8 @@ const handleSingUp = async () => {
                     data: {
                         fullname: fullname.value,
                         nickname: nickname.value,
-                        avatar_url: avatar_url.value
+                        avatar_url: avatar_url.value,
+                        cover_url: cover_url.value
                     },
                 }
             }
@@ -76,6 +77,7 @@ const handleLogin = async () => {
                                 <div>
                                     <input class="inputField" type="text" placeholder="ФИО" v-model="fullname" />
                                     <input class="inputField" type="text" placeholder="Никнейм" v-model="nickname" />
+                                    
                                     <!-- <input class="inputField" type="text" placeholder="Ссылка на автарку" v-model="avatar_url" />  -->
                                 </div>
                             </div>

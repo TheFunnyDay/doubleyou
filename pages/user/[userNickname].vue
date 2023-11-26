@@ -49,7 +49,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
     <div id="wall-content">
         <Header :title="route.params.userNickname" />
         <div id="user-info"  style="color: white">
-            <div id="user-cover" :style="'background-image: url(' + user.cover_url + ')'"></div>
+            <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
                 <div id="userAvatar"                         
                     :style="

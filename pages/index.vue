@@ -32,7 +32,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
 });
 
 const createPost = async () => {
-    if (!user) throw new Error('User not found');
+    if (!user) throw new Error('Пользователь не найдет');
     if (post_text.value === '') {
         alert("Пост не может быть пустым")
         return false;
