@@ -57,7 +57,7 @@ const createPost = async () => {
         <Header title="Главная" />
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
-            <form  @submit.prevent="createPost">
+            <form  @submit="createPost">
                 <textarea 
                     placeholder="Что нового?"
                     maxlength="263" 
@@ -110,7 +110,7 @@ const createPost = async () => {
                 </div>
                 <div class="post-content">
                     <p class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
-                    <span class="post-image" v-if="post.post_image !== null">
+                    <span class="post-image" v-if="post.post_image !== null" @click="$router.push('/post/' + post.id)">
                         <img :src="post.post_image">
                     </span>
                 </div>

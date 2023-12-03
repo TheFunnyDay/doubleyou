@@ -32,7 +32,13 @@ useSeoMeta({
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">
-                        <div class="avatar" :style="'background-image: url(' + post.profiles.avatar_url + ')'"></div>
+                        <div class="avatar"                         
+                        :style="
+                        [
+                            {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
+                            [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
+                        ]"
+                        ></div>
                         <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
                             <div class="post-user-flname">{{ post.profiles.fullname }}
                                 <span v-if="post.profiles.is_verification === true"
