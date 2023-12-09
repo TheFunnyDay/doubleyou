@@ -74,15 +74,27 @@ const { data: posts } = await useAsyncData('posts', async () => {
             </div>
         </div>
         <div id="user-posts">
+            <div id="user-view-switcher">
+                <div class="user-switch-to">
+                    <span>Посты</span>
+                </div>
+                <div class="user-switch-to">
+                    <span>Лайки</span>
+                </div>
+                <div class="user-switch-to">
+                    <span>Репосты</span>
+                </div>
+            </div>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">
-                        <div class="avatar"                         
-                                :style="
-                                [
-                                    {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
-                                    [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
-                                ]"
+                        <div class="avatar"       
+                            @click="$router.push('/user/' + post.profiles.nickname)"                  
+                            :style="
+                            [
+                                {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
+                                [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
+                            ]"
                         >
                         </div>
                         <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
@@ -99,7 +111,14 @@ const { data: posts } = await useAsyncData('posts', async () => {
                             <div class="post-user-nickname">@{{ post.profiles.nickname }}</div>
                         </div>
                     </div>
-                    <div class="post-created-at">{{ new Date(post.created_at).toLocaleDateString() }}</div>
+                    <div class="post-created-at">
+                        <span>     
+                             {{ new Date(post.created_at).toLocaleDateString() }}
+                        </span>
+                        <span>
+                            {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        </span>
+                    </div>
                 </div>
                 <div class="post-content">
                     <p class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
@@ -128,6 +147,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
         background-size: cover;
         background-position: center;
         border-radius: 25px;
+        border-bottom: 1px solid var(--main-outline-color);
     }
 
     #user-main-info {
@@ -175,5 +195,36 @@ const { data: posts } = await useAsyncData('posts', async () => {
 #user-posts {
     width: 100%;
     max-width: 646px;
+    #user-view-switcher {
+        user-select: none;
+        display: flex;
+        width: 100%;
+        border-radius: 25px;
+        background-color: var(--main-color);
+        outline: 1px solid var(--main-outline-color);
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 20px;
+        overflow: hidden;
+        .user-switch-to {
+            display: flex;
+            padding: 15px;
+            width: 100%;
+            cursor: pointer;
+            color: white;
+            font-weight: 700;
+            font-size: 18px;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+            &:hover {
+                color: black;
+                background-color: var(--highlight-color);
+                span {
+                    color: black;
+                }
+            }
+        }
+    }
 }
 </style>

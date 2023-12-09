@@ -60,7 +60,7 @@ p {
     background-image: url('/icons/check.png');
     background-color: yellow;
     background-color: yellow;
-    background-size: 59%;
+    background-size: 58%;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -184,7 +184,14 @@ p {
             }
         }
         .post-created-at {
-            color: var(--sub-text-color)
+            display: flex;
+            flex-direction: column;
+            align-content: flex-end;
+            align-items: flex-end;
+            flex-wrap: nowrap;
+            span {
+                color: var(--sub-text-color) !important;
+            }
         }
         
     }
@@ -197,6 +204,7 @@ p {
         .post-text {
             color: white;
             white-space: pre-line;
+            overflow: hidden;
         }
 
         .post-image {

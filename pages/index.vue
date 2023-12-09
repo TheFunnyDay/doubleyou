@@ -48,6 +48,7 @@ const createPost = async () => {
         .single();
     if (error) throw error;
     post_text.value = '';
+    post_image.value = '';
     return data;
 };
 </script>
@@ -57,7 +58,7 @@ const createPost = async () => {
         <Header title="Главная" />
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
-            <form  @submit="createPost">
+            <form @submit.prevent="createPost">
                 <textarea 
                     placeholder="Что нового?"
                     maxlength="263" 
@@ -84,14 +85,15 @@ const createPost = async () => {
                 <div class="user-info-container">
                     <div class="user-main-info">
                         <div class="avatar" 
+                        
                         :style="
                         [
                             {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
                             [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
                         ]"
-                        
+                        @click="$router.push('/user/' + post.profiles.nickname)"
                         >
-                    </div>
+                        </div>
                         <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
                             <div class="post-user-flname">{{ post.profiles.fullname }}
                                 <span v-if="post.profiles.is_verification === true"
@@ -106,7 +108,14 @@ const createPost = async () => {
                             <div class="post-user-nickname">@{{ post.profiles.nickname }}</div>
                         </div>
                     </div>
-                    <div class="post-created-at">{{ new Date(post.created_at).toLocaleDateString() }}</div>
+                    <div class="post-created-at">
+                        <span>     
+                             {{ new Date(post.created_at).toLocaleDateString() }}
+                        </span>
+                        <span>
+                            {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        </span>
+                    </div>
                 </div>
                 <div class="post-content">
                     <p class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>

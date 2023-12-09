@@ -59,10 +59,16 @@ const handleLogin = async () => {
     }
 }
 
+const loginBg = ref('');
+onMounted(() => {
+    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png'];
+    const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
+    loginBg.value = `url('/${randomImage}')`;
+});
 </script>
 
 <template>
-    <div id="login-bg">
+    <div id="login-bg" :style="{ backgroundImage: loginBg }">
         <div id="authPage" :style="{backdropFilter: isSignUp ? '': 'blur(10px)'}">
             <div id="authForm">
                 <img src="/doubleyou-logo-white.png">
@@ -113,7 +119,7 @@ const handleLogin = async () => {
 <style lang="scss">
 #login-bg {
     display: flex;
-    background-image: url('@/login-bg.png');
+    background-color: black;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

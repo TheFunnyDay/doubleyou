@@ -101,7 +101,7 @@
                 }
                 .nickanme {
                     font-size: 16px;
-                    color: #ABABAB;
+                    color: var(--sub-text-color);
                 }
                 .decs {
                     font-size: 16px;

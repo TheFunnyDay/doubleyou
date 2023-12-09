@@ -32,12 +32,13 @@ useSeoMeta({
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">
-                        <div class="avatar"                         
-                        :style="
-                        [
-                            {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
-                            [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
-                        ]"
+                        <div class="avatar"     
+                            @click="$router.push('/user/' + post.profiles.nickname)"
+                            :style="
+                            [
+                                {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
+                                [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
+                            ]"
                         ></div>
                         <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
                             <div class="post-user-flname">{{ post.profiles.fullname }}
@@ -53,7 +54,14 @@ useSeoMeta({
                             <div class="post-user-nickname">@{{ post.profiles.nickname }}</div>
                         </div>
                     </div>
-                    <div class="post-created-at">{{ new Date(post.created_at).toLocaleDateString() }}</div>
+                    <div class="post-created-at">
+                        <span>     
+                             {{ new Date(post.created_at).toLocaleDateString() }}
+                        </span>
+                        <span>
+                            {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                        </span>
+                    </div>
                 </div>
                 <div class="post-content">
                     <p class="post-text" v-text="post.post_text"></p>
