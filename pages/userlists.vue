@@ -15,23 +15,33 @@
     <div id="wall-content">
             <Header title="Пользователи"/>
             <div id="user-list-con">
+                <input type="text" placeholder="Поиск" id="users-search" />
                 <div class="user-in-list" v-for="profile in profiles" :key="profile.id">
                 <NuxtLink :to="'/user/' + profile.nickname">
                     <div class="user-cover" 
                     :style="'background-image: url(' + profile.cover_url + ')'"
                     v-if="profile.cover_url !== null && (profile.is_verification === true || profile.is_premium=== true)">
                     </div>
-                    <div class="user">
+                    <div class="user"
+                        :style="
+                        [
+                            profile.is_premium ? ('padding: 10px 20px 0px 20px;') : ('padding: 20px;') 
+                        ]"
+                    >
                         <div class="avatar"                         
                         :style="
                         [
                             {backgroundImage: 'url(' + profile.avatar_url + ')'},
-                            [profile.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
-                        ]"> 
+                            [profile.is_premium 
+                                ? ('border: 2px solid var(--highlight-color); bottom: 58px;') 
+                                : ('border: 2px solid var(--main-outline-color); flex: 0 0 80px; width: 80px; height: 80px; ')
+                            ]
+                        ]"
+                        > 
                         </div>
                         <div class="nickname-desc">
                             <div class="fullname">
-                               <span style="display: flex;"> 
+                                <span style="display: flex;"> 
                                 {{ profile.fullname }} 
                                     <span v-if="profile.is_verification === true"
                                         style="height: 16px;width: 16px; margin-left: 5px;"
@@ -62,6 +72,16 @@
     display: flex;
     width: 100%;
     flex-direction: column;
+    #users-search {
+        width: 100%;
+        padding: 25px;
+        font-size: 18px;
+        transition: .3s;
+        &:focus {
+            color: #000000;
+            background-color: var(--highlight-color);
+        }
+    }
     .user-in-list {
         overflow: hidden;
         display: flex;
@@ -83,10 +103,12 @@
             display: flex;
             color: white;
             padding: 20px;
+            transition: background-color .3s;
             .avatar {
-                flex: 0 0 70px;
-                width: 70px;
-                height: 70px;
+                position: relative;
+                flex: 0 0 100px;
+                width: 100px;
+                height: 100px;
                 border-radius: 100%;
                 background-size: cover;
                 background-position: center;
@@ -108,6 +130,9 @@
                     margin-top: 10px;
                 }
             }
+        }
+        &:hover {
+            background-color: var(--highlight-color-alpha);
         }
         &:not(:first-child) {
             margin-top: 20px;

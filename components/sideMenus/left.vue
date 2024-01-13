@@ -24,6 +24,7 @@ const logout = async () => {
             <NuxtLink to="/" class="leftNav"><img src="/icons/home.png" alt="">Главная</NuxtLink>
             <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt="">Пользователи</NuxtLink>
             <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt="">Настройки</NuxtLink>
+            <NuxtLink to="/premium" class="leftNav"><img src="/doubleyou-logo-white.png" alt="">Премиум</NuxtLink>
             <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span>Профиль</NuxtLink>
             <p @click="logout" id="logout" class="leftNav"> Выйти</p>
         </div>
@@ -54,7 +55,7 @@ const logout = async () => {
                 user-select: none;
                 display: flex;
                 font-size: 20px;
-                font-weight: 500;
+                font-weight: 400;
                 text-decoration: none;
                 color: white;
                 width: 100%;

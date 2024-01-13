@@ -82,7 +82,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
                     <span>Лайки</span>
                 </div>
                 <div class="user-switch-to">
-                    <span>Репосты</span>
+                    <span>Ответы</span>
                 </div>
             </div>
             <div class="post" v-for="post in posts" :key="post.id">
@@ -113,7 +113,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
                     </div>
                     <div class="post-created-at">
                         <span>     
-                             {{ new Date(post.created_at).toLocaleDateString() }}
+                            {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
                             {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
@@ -122,9 +122,19 @@ const { data: posts } = await useAsyncData('posts', async () => {
                 </div>
                 <div class="post-content">
                     <p class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
-                    <span class="post-image" v-if="post.post_image !== null">
+                    <span class="post-image" v-if="post.post_image !== null" @click="$router.push('/post/' + post.id)">
                         <img :src="post.post_image">
                     </span>
+                </div>
+                <div class="post-footer">
+                    <div class="post-likes">
+                        <div class="likes-button"></div>
+                        <div class="likes-count">0</div>
+                    </div>
+                    <div class="post-comments" @click="$router.push('/post/' + post.id)">
+                        <div class="comments-button"></div>
+                        <div class="comments-count">0</div>
+                    </div>
                 </div>
             </div>
         </div>

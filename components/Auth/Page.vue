@@ -33,7 +33,6 @@ const handleSingUp = async () => {
         )
 
         if (error) throw error
-        alert('Вы успешно зарегистрировались!')
     } catch (error) {
         alert(error.error_description || error.message)
     } finally {
@@ -51,7 +50,6 @@ const handleLogin = async () => {
         )
 
         if (error) throw error
-        alert('Успешно')
     } catch (error) {
         alert(error.error_description || error.message)
     } finally {
@@ -61,7 +59,7 @@ const handleLogin = async () => {
 
 const loginBg = ref('');
 onMounted(() => {
-    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png'];
+    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png', 'login-bg6.png'];
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('/${randomImage}')`;
 });
@@ -134,6 +132,7 @@ onMounted(() => {
         color: white;
         transition: .3s backdrop-filter;
         img {
+            user-select: none;
             width: 200px;
         }
 
@@ -182,6 +181,7 @@ onMounted(() => {
     }
     h1, p {
         text-align: center;
+        user-select: none;
     }
 }
 }

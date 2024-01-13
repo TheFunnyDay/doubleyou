@@ -1,10 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    devtools: { enabled: true },
+    devtools: { enabled: false },
     css: [
         '~/assets/styles/global.scss',
     ],
-    modules: ['@nuxtjs/supabase'],
+    modules: [
+        '@nuxtjs/supabase',
+        '@nuxt/image'
+    ],
     supabase: {
         redirectOptions: {
             login: '/login',

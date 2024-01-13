@@ -2,6 +2,10 @@
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 
+useSeoMeta({
+    title: 'Настройки профиля | W',
+});
+
 const { data: profile } = await useAsyncData('profiles', async () => {
     const { data } = await supabase.from('profiles')
         .select(`

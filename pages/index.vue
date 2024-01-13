@@ -1,7 +1,7 @@
 <script setup>
     const user = useSupabaseUser();
     const supabase = useSupabaseClient();
-    const post_text = ref('')
+    const post_text = ref(null)
     const post_image = ref(null)
     const userAvatar = user.value.user_metadata.avatar_url
     definePageMeta({
@@ -33,7 +33,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
 
 const createPost = async () => {
     if (!user) throw new Error('Пользователь не найдет');
-    if (post_text.value === '') {
+    if (post_text.value === '' && !post_image.value) {
         alert("Пост не может быть пустым")
         return false;
     };
@@ -69,9 +69,10 @@ const createPost = async () => {
                     <div class="post-input-button">
                         <input 
                             id="post-add-image" 
-                            class="button" 
+                            class="main-input" 
                             v-model="post_image"
                             placeholder="Ссылка на картинку"
+                            style="text-align: center;"
                         >
                     </div>
                     <div class="post-input-button">
@@ -110,7 +111,7 @@ const createPost = async () => {
                     </div>
                     <div class="post-created-at">
                         <span>     
-                             {{ new Date(post.created_at).toLocaleDateString() }}
+                            {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
                             {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
@@ -118,10 +119,20 @@ const createPost = async () => {
                     </div>
                 </div>
                 <div class="post-content">
-                    <p class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
+                    <p v-if="post.post_text !== null" class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
                     <span class="post-image" v-if="post.post_image !== null" @click="$router.push('/post/' + post.id)">
                         <img :src="post.post_image">
                     </span>
+                </div>
+                <div class="post-footer">
+                    <div class="post-likes">
+                        <div class="likes-button" @click="counter++"></div>
+                        <div class="likes-count"></div>
+                    </div>
+                    <div class="post-comments" @click="$router.push('/post/' + post.id)">
+                        <div class="comments-button"></div>
+                        <div class="comments-count"></div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,7 +1,10 @@
-
 <script setup>
     const supabase = useSupabaseClient();
     const router = useRoute();
+    const user = useSupabaseUser();
+
+    const userAvatar = user.value.user_metadata.avatar_url || 1;
+
     const { data: posts } = await useAsyncData('posts', async () => {
     const { data } = await supabase.from('posts')
         .select(`
@@ -56,7 +59,7 @@ useSeoMeta({
                     </div>
                     <div class="post-created-at">
                         <span>     
-                             {{ new Date(post.created_at).toLocaleDateString() }}
+                            {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
                             {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
@@ -69,9 +72,20 @@ useSeoMeta({
                         <img :src="post.post_image">
                     </span>
                 </div>
+                <div class="post-footer">
+                    <div class="post-likes">
+                        <div class="likes-button"></div>
+                        <div class="likes-count">0</div>
+                    </div>
+                    <div class="post-comments" @click="$router.push('/post/' + post.id)">
+                        <div class="comments-button"></div>
+                        <div class="comments-count">0</div>
+                    </div>
+                </div>
             </div>
             <div id="comments-con" class="content main-margin" style="text-align: center;">
-                <h3>Комментарии временно недоступны</h3>
+                <div id="cooments-con-user-avatar" :style="{backgroundImage: 'url(' + userAvatar + ')'}"></div>
+                <input type="text" maxlength="263" placeholder="Ответить...">
             </div>
         </div>
 </template>
@@ -85,7 +99,36 @@ useSeoMeta({
             &:hover {
                 background-color: var(--main-color);
             }
+            .post-text {
+                cursor: text;
+            }
         }
     }
+    #comments-con {
+        display: flex;
+        #cooments-con-user-avatar {
+            flex: 1 0 40px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: red;
+        }
+        input {
+            width: 100%;
+            font-size: 18px;
+            max-width: 646px;
+            background: none;
+            border: none;
+            outline: none;
+            margin-left: 10px;
+            border-radius: 0;
+            &:focus {
+                outline: none;
+            }
+        }
 
+    }
 </style>
