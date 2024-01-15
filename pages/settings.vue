@@ -63,7 +63,7 @@ const handleUserMetaUpdate = async () => {
                         <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/>
                         <p class="main-margin">Аватарка</p>
                         <input type="text" name="" v-model="userAvatar" class="main-input" />
-                        <p class="main-margin">Обожка</p>
+                        <p class="main-margin">Обложка</p>
                         <input type="text" name="" v-model="userCover" class="main-input" />
                         <input type="submit" value="Сохранить" class="button main-margin">
                     </form>

@@ -19,6 +19,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
             created_at,
             post_text,
             post_image,
+            likes_count,
             profiles (
                 nickname,
                 fullname,
@@ -51,6 +52,45 @@ const createPost = async () => {
     post_image.value = '';
     return data;
 };
+
+const postLike = async (id) => {
+    const { data: postData, error: fetchError } = await supabase
+        .from('posts')
+        .select('likes_count, users_who_liked')
+        .eq('id', id)
+        .single();
+
+    if (fetchError) {
+        throw fetchError;
+    }
+    // let getLikesUser = postData.map(item => item.users_who_liked)
+    const currentLikesCount = postData.likes_count || 0;
+    // const usersWhoLiked = postData.users_who_liked ? JSON.parse(getLikesUser) : [];
+
+    // if (Array.isArray(usersWhoLiked) && !usersWhoLiked.includes(user.value.id)) {
+    //     console.log(usersWhoLiked)
+    //     usersWhoLiked.push(user.value.id);
+
+        const updatedData = await supabase
+            .from('posts')
+            .update({
+                likes_count: currentLikesCount + 1,
+                // users_who_liked: JSON.stringify(usersWhoLiked),
+            })
+            .eq('id', id)
+            .single();
+
+        if (updatedData.error) {
+            throw updatedData.error;
+        }
+
+        return updatedData.data;
+    // } else {
+    //     console.log('Вы уже лайкнули этот пост');
+    //     return postData;
+    // }
+};
+
 </script>
 
 <template>
@@ -126,8 +166,8 @@ const createPost = async () => {
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button" @click="counter++"></div>
-                        <div class="likes-count"></div>
+                        <div class="likes-button" @click="postLike(post.id)" ></div>
+                        <div class="likes-count" v-text="post.likes_count" @click="counter++"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
                         <div class="comments-button"></div>

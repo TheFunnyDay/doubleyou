@@ -12,6 +12,7 @@
             created_at,
             post_text,
             post_image,
+            likes_count,
             profiles (
                 nickname,
                 fullname,
@@ -75,7 +76,7 @@ useSeoMeta({
                 <div class="post-footer">
                     <div class="post-likes">
                         <div class="likes-button"></div>
-                        <div class="likes-count">0</div>
+                        <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
                         <div class="comments-button"></div>
