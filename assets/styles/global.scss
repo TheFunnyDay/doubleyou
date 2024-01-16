@@ -47,6 +47,13 @@ p {
         flex-direction: column;
         flex-wrap: nowrap;
         flex: 0 1 646px;
+        transition: .1s;
+        @media (max-width: 780px) {
+            flex: 0 1 550px;
+        }
+        @media (max-width: 615px) {
+            flex: 1 1 100%;
+        }
     }
 }
 

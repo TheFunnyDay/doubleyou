@@ -49,6 +49,24 @@ const user = useSupabaseUser();
             align-items: flex-end;
             flex-wrap: wrap;
             justify-content: flex-start;
+            transition: .1s;
+        }
+        @media (max-width: 700px) {
+            #right {
+                flex: 0;
+                padding-left: 10px;
+            }
+        }
+        @media (max-width: 615px) {
+            #right {
+                flex: 0;
+                padding-left: 0;
+            }
+        }
+        @media (max-width: 615px) {
+            #left {
+                flex: 0;
+            }
         }
     }
 </style>

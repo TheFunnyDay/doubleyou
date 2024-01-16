@@ -78,10 +78,11 @@ useSeoMeta({
                         <div class="likes-button"></div>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
-                    <div class="post-comments" @click="$router.push('/post/' + post.id)">
+                    <!-- i guess i need to remove this from post view -->
+                    <!-- <div class="post-comments" @click="$router.push('/post/' + post.id)">
                         <div class="comments-button"></div>
-                        <div class="comments-count">0</div>
-                    </div>
+                        <div class="comments-count"></div>
+                    </div> -->
                 </div>
             </div>
             <div id="comments-con" class="content main-margin" style="text-align: center;">
@@ -116,6 +117,7 @@ useSeoMeta({
             background-position: center;
             background-repeat: no-repeat;
             background-color: red;
+            border: 2px solid var(--highlight-color);
         }
         input {
             width: 100%;

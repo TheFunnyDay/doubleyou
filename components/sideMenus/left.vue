@@ -21,12 +21,12 @@ const logout = async () => {
     <div id="leftBar">
         <div id="logo" @click="$router.push('/')"></div>
         <div id="leftBarMenu">
-            <NuxtLink to="/" class="leftNav"><img src="/icons/home.png" alt="">Главная</NuxtLink>
-            <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt="">Пользователи</NuxtLink>
-            <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt="">Настройки</NuxtLink>
-            <NuxtLink to="/premium" class="leftNav"><img src="/doubleyou-logo-white.png" alt="">Премиум</NuxtLink>
-            <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span>Профиль</NuxtLink>
-            <p @click="logout" id="logout" class="leftNav"> Выйти</p>
+            <NuxtLink to="/" class="leftNav"><img src="/icons/home.png" alt=""><span class="leftNav-text">Главная</span></NuxtLink>
+            <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt=""><span class="leftNav-text">Пользователи</span></NuxtLink>
+            <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt=""><span class="leftNav-text">Настройки</span></NuxtLink>
+            <NuxtLink to="/premium" class="leftNav"><img src="/doubleyou-logo-white.png" alt=""><span class="leftNav-text">Премиум</span></NuxtLink>
+            <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span><span class="leftNav-text">Профиль</span></NuxtLink>
+            <p @click="logout" id="logout" class="leftNav"> <span class="leftNav-text">Выйти</span></p>
         </div>
     </div>
 </template>
@@ -50,6 +50,8 @@ const logout = async () => {
             background-repeat: no-repeat;
         }
         #leftBarMenu {
+            display: flex;
+            flex-direction: column;
             .leftNav {
                 cursor: pointer;
                 user-select: none;
@@ -72,7 +74,9 @@ const logout = async () => {
                 }
                 &:active {
                     background-color: var(--highlight-color);
-                    color: var(--sub-text-color-hover);
+                    .leftNav-text {
+                        color: var(--sub-text-color-hover);
+                    }
                     img {
                         filter: invert(1);
                     }
@@ -80,6 +84,9 @@ const logout = async () => {
                 img {
                     width: 24px;
                     margin-right: 10px;
+                    @media (max-width: 1080px) {
+                        margin-right: 0;
+                    }
                 }
                 .avatar {
                     width: 26px;
@@ -89,6 +96,21 @@ const logout = async () => {
                     background-size: cover;
                     background-position: center;
                     outline: 2px solid var(--highlight-color);
+                    @media (max-width: 1080px) {
+                        margin-right: 0;
+                    }
+                }
+                .leftNav-text {
+                    transition: .1s;
+                    overflow: hidden;
+                    // width: 100%;
+                    @media (max-width: 1080px) {
+                        opacity: 0;
+                        width: 0;
+                    }
+                }
+                @media (max-width: 1080px) {
+                    justify-content: center;
                 }
             }
         }

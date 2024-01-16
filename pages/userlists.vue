@@ -95,9 +95,10 @@
         }
         .user-cover {
             width: 100%;
-            height: 112px;
+            height: 150px;
             background-size: cover;
             background-position: center;
+            border-radius: 0 0 25px 25px;
         }
         .user {
             display: flex;
