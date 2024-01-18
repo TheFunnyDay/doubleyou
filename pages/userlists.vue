@@ -99,6 +99,7 @@
             background-size: cover;
             background-position: center;
             border-radius: 0 0 25px 25px;
+            border-bottom: 1px solid var(--main-outline-color);
         }
         .user {
             display: flex;

@@ -101,12 +101,11 @@ const logout = async () => {
                     }
                 }
                 .leftNav-text {
-                    transition: .1s;
+                    transition: .3s opacity;
                     overflow: hidden;
-                    // width: 100%;
                     @media (max-width: 1080px) {
-                        opacity: 0;
                         width: 0;
+                        opacity: 0;
                     }
                 }
                 @media (max-width: 1080px) {
