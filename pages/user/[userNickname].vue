@@ -1,7 +1,7 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
-import userData from "../../assets/userData.json";
+// import userData from "../../assets/userData.json";
 
 const supabase = useSupabaseClient();
 const route = useRoute();
@@ -159,6 +159,9 @@ const { data: posts } = await useAsyncData('posts', async () => {
         background-position: center;
         border-radius: 25px;
         border-bottom: 1px solid var(--main-outline-color);
+        @media (max-width: 780px) {
+                    max-height: 170px;
+        }
     }
 
     #user-main-info {

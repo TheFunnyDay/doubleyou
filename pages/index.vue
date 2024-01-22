@@ -34,7 +34,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
 
 const createPost = async () => {
     if (!user) throw new Error('Пользователь не найдет');
-    if (post_text.value === '' && !post_image.value) {
+    if (post_text.value === null && !post_image.value) {
         alert("Пост не может быть пустым")
         return false;
     };
@@ -98,7 +98,7 @@ const postLike = async (id) => {
         <Header title="Главная" />
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
-            <form @submit.prevent="createPost">
+            <form @submit="createPost">
                 <textarea 
                     placeholder="Что нового?"
                     maxlength="263" 

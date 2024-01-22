@@ -25,8 +25,9 @@ const logout = async () => {
             <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt=""><span class="leftNav-text">Пользователи</span></NuxtLink>
             <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt=""><span class="leftNav-text">Настройки</span></NuxtLink>
             <NuxtLink to="/premium" class="leftNav"><img src="/doubleyou-logo-white.png" alt=""><span class="leftNav-text">Премиум</span></NuxtLink>
+            <NuxtLink to="/about" class="leftNav"><img src="/icons/info.png" alt=""><span class="leftNav-text">О проекте</span></NuxtLink>
             <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span><span class="leftNav-text">Профиль</span></NuxtLink>
-            <p @click="logout" id="logout" class="leftNav"> <span class="leftNav-text">Выйти</span></p>
+            <p @click="logout" id="logout" class="leftNav"><img src="/icons/exit.png" alt=""><span class="leftNav-text">Выйти</span></p>
         </div>
     </div>
 </template>
@@ -105,6 +106,7 @@ const logout = async () => {
                     overflow: hidden;
                     @media (max-width: 1080px) {
                         width: 0;
+                        height: 0;
                         opacity: 0;
                     }
                 }

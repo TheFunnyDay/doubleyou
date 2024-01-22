@@ -68,9 +68,11 @@ useSeoMeta({
                     </div>
                 </div>
                 <div class="post-content">
-                    <p class="post-text" v-text="post.post_text"></p>
+                    <p class="post-text" v-if="post.post_text !== null" v-text="post.post_text"></p>
                     <span class="post-image" v-if="post.post_image !== null">
-                        <img :src="post.post_image">
+                        <a :href="post.post_image" target="_blank">
+                            <img :src="post.post_image">
+                        </a>
                     </span>
                 </div>
                 <div class="post-footer">

@@ -87,6 +87,7 @@ p {
 }
 
 .content {
+    
     border-radius: 25px;
     padding: 20px;
     color: var(--main-text-color);
@@ -95,6 +96,9 @@ p {
     outline: 1px solid var(--main-outline-color);
     h1 {
         user-select: none;
+    }
+    &:last-child {
+        margin-bottom: 20px;
     }
 }
 
@@ -186,7 +190,6 @@ p {
                 }
                 .post-user-nickname {
                     color: var(--sub-text-color);
-    
                     &:hover {
                         text-decoration: underline;
                     }
@@ -230,7 +233,7 @@ p {
                 max-width: 100%;
                 max-height: 500px;
                 transition: .3s;
-                @media (max-width: 615px) {
+                @media (max-width: 780px) {
                     max-height: 300px;
                 }
             }
