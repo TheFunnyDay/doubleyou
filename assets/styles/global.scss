@@ -12,10 +12,10 @@
     --main-text-color: #ffffff;
     --sub-text-color: #ABABAB;
     --sub-text-color-hover: #000000;
-    --main-color: #1d1d1d;
+    --main-color: #000000;
     --main-color-alpha: rgba(29, 29, 29, 0.6);
     --sub-color: #0f0f0f;
-    --main-outline-color: #3f3f3f;
+    --main-outline-color: #2f3633;
     --main-border-color: #3f3f3f;
     --highlight-color: #00dc82;
     --highlight-color-alpha: #1a2923;
@@ -87,8 +87,6 @@ p {
 }
 
 .content {
-    
-    border-radius: 25px;
     padding: 20px;
     color: var(--main-text-color);
     background-color: var(--main-color);
@@ -152,9 +150,7 @@ p {
     height: auto;
     background-color: var(--main-color);
     outline: 1px solid var(--main-outline-color);
-    border-radius: 25px;
     padding: 18px;
-    margin-top: 20px;
     transition: .3s background-color;
     &:hover {
         background-color: var(--highlight-color-alpha);

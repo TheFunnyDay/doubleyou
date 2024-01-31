@@ -71,7 +71,7 @@ const handleUserMetaUpdate = async () => {
                 </div>
             </div>
         </div>
-        <div class="content main-margin">
+        <div class="content">
             <h1>Тут ничего нет</h1>
         </div>
     </div>    

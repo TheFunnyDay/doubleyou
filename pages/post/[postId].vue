@@ -87,7 +87,7 @@ useSeoMeta({
                     </div> -->
                 </div>
             </div>
-            <div id="comments-con" class="content main-margin" style="text-align: center;">
+            <div id="comments-con" class="content" style="text-align: center;">
                 <div id="cooments-con-user-avatar" :style="{backgroundImage: 'url(' + userAvatar + ')'}"></div>
                 <input type="text" maxlength="263" placeholder="Ответить...">
             </div>
@@ -101,7 +101,7 @@ useSeoMeta({
             margin-top: 0;
             max-width: 646px;
             &:hover {
-                background-color: var(--main-color);
+                background-color: black;
             }
             .post-text {
                 cursor: text;

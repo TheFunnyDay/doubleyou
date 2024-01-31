@@ -98,7 +98,7 @@ const postLike = async (id) => {
         <Header title="Главная" />
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
-            <form @submit="createPost">
+            <form @submit.prevent="createPost">
                 <textarea 
                     placeholder="Что нового?"
                     maxlength="263" 
@@ -192,7 +192,6 @@ const postLike = async (id) => {
         max-width: 646px;
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
-        border-radius: 25px;
         padding: 18px;
         form {
             width: 100%;

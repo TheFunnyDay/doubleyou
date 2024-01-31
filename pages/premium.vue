@@ -19,7 +19,7 @@ onMounted(() => {
                 <h1 style="margin-left: 10px; font-size: 2em;">DoubleYou Премиум</h1>
             </div>
         </div>
-        <div class="content main-margin">
+        <div class="content">
             <div class="premium-explain__text">
                     <h1>Что это?</h1>
                     <p><b>DoubleYou премиум</b> позволяет пользователям отличаться от остальных. </p>

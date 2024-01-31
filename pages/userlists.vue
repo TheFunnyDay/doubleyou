@@ -15,7 +15,7 @@
     <div id="wall-content">
             <Header title="Пользователи"/>
             <div id="user-list-con">
-                <input type="text" placeholder="Поиск" id="users-search" />
+                <input type="text" placeholder="Поиск пользователя" id="users-search" />
                 <div class="user-in-list" v-for="profile in profiles" :key="profile.id">
                 <NuxtLink :to="'/user/' + profile.nickname">
                     <div class="user-cover" 
@@ -77,6 +77,7 @@
         padding: 25px;
         font-size: 18px;
         transition: .3s;
+        border-radius: 0;
         &:focus {
             color: #000000;
             background-color: var(--highlight-color);
@@ -86,9 +87,10 @@
         overflow: hidden;
         display: flex;
         width: 100%;
-        border-radius: 25px;
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
+        border-bottom: 1px solid var(--main-outline-color);
+        border-top: 1px solid var(--main-outline-color);
         flex-direction: column;
         a {
             text-decoration: none;
@@ -98,7 +100,6 @@
             height: 150px;
             background-size: cover;
             background-position: center;
-            border-radius: 0 0 25px 25px;
             border-bottom: 1px solid var(--main-outline-color);
         }
         .user {
@@ -135,9 +136,6 @@
         }
         &:hover {
             background-color: var(--highlight-color-alpha);
-        }
-        &:not(:first-child) {
-            margin-top: 20px;
         }
     }
 }

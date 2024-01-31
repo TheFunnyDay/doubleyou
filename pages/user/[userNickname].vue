@@ -147,7 +147,6 @@ const { data: posts } = await useAsyncData('posts', async () => {
     display: flex;
     overflow: hidden;
     width: 100%;
-    border-radius: 25px;
     flex-direction: column;
     align-items: stretch;
     background-color: var(--main-color);
@@ -157,10 +156,9 @@ const { data: posts } = await useAsyncData('posts', async () => {
         height: 200px;
         background-size: cover;
         background-position: center;
-        border-radius: 25px;
         border-bottom: 1px solid var(--main-outline-color);
         @media (max-width: 780px) {
-                    max-height: 170px;
+            max-height: 170px;
         }
     }
 
@@ -213,12 +211,10 @@ const { data: posts } = await useAsyncData('posts', async () => {
         user-select: none;
         display: flex;
         width: 100%;
-        border-radius: 25px;
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
         flex-direction: row;
         justify-content: space-around;
-        margin-top: 20px;
         overflow: hidden;
         .user-switch-to {
             display: flex;
