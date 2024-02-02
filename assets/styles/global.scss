@@ -39,7 +39,6 @@ p {
 }
 
 #app {
-    --main-bg-color: #000000;
     #wall-content {
         display: flex;
         justify-content: center;
@@ -210,7 +209,7 @@ p {
         margin-top: 15px;
         flex-direction: column;
         .post-text {
-            color: white;
+            color: var(--main-text-color);
             white-space: pre-line;
             overflow: hidden;
         }
@@ -221,7 +220,7 @@ p {
             align-items: center;
             max-height: 500px;
             margin-top: 10px;
-            background-color: #000000;
+            background-color: var(--main-bg-color);
             border-radius: 25px;
             overflow: hidden;
             outline: 1px solid var(--main-outline-color);

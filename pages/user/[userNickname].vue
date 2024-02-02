@@ -1,10 +1,10 @@
 <script setup>
 
 import { useRoute } from 'vue-router';
-// import userData from "../../assets/userData.json";
 
 const supabase = useSupabaseClient();
 const route = useRoute();
+
 useSeoMeta({
     title: '@' + route.params.userNickname + ' | W',
 });

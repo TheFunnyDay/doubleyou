@@ -63,34 +63,37 @@ const postLike = async (id) => {
     if (fetchError) {
         throw fetchError;
     }
-    // let getLikesUser = postData.map(item => item.users_who_liked)
-    const currentLikesCount = postData.likes_count || 0;
-    // const usersWhoLiked = postData.users_who_liked ? JSON.parse(getLikesUser) : [];
+    const usersWhoLiked = postData.users_who_liked ? JSON.parse(postData.users_who_liked) : [];
 
-    // if (Array.isArray(usersWhoLiked) && !usersWhoLiked.includes(user.value.id)) {
-    //     console.log(usersWhoLiked)
-    //     usersWhoLiked.push(user.value.id);
+    const userIndex = usersWhoLiked.indexOf(user.value.id);
 
-        const updatedData = await supabase
-            .from('posts')
-            .update({
-                likes_count: currentLikesCount + 1,
-                // users_who_liked: JSON.stringify(usersWhoLiked),
-            })
-            .eq('id', id)
-            .single();
+    if (userIndex === -1) {
+        usersWhoLiked.push(user.value.id);
+    } else {
+        usersWhoLiked.splice(userIndex, 1);
+    }
 
-        if (updatedData.error) {
-            throw updatedData.error;
-        }
+    const updatedLikesCount = usersWhoLiked.length;
 
-        return updatedData.data;
-    // } else {
-    //     console.log('Вы уже лайкнули этот пост');
-    //     return postData;
-    // }
+    const updatedData = await supabase
+        .from('posts')
+        .update({
+            likes_count: updatedLikesCount,
+            users_who_liked: JSON.stringify(usersWhoLiked),
+        })
+        .eq('id', id)
+        .single();
+
+    if (updatedData.error) {
+        throw updatedData.error;
+    }
+
+    return updatedLikesCount;
 };
 
+const handleLike = async (post) => {
+    post.likes_count = await postLike(post.id);
+};
 </script>
 
 <template>
@@ -166,8 +169,8 @@ const postLike = async (id) => {
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button" @click="postLike(post.id)" ></div>
-                        <div class="likes-count" v-text="post.likes_count" @click="counter++"></div>
+                        <div class="likes-button" @click="postLike(post.id); handleLike(post)" ></div>
+                        <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
                         <div class="comments-button"></div>

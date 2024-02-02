@@ -59,7 +59,7 @@ const handleLogin = async () => {
 
 const loginBg = ref('');
 onMounted(() => {
-    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png', 'login-bg6.png', 'login-bg7.png', 'login-bg8.png', 'login-bg9.png', 'login-bg10.png'];
+    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png', 'login-bg6.png', 'login-bg7.png', 'login-bg8.png', 'login-bg9.png'];
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('/${randomImage}')`;
 });

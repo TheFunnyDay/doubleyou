@@ -4,7 +4,10 @@
     const user = useSupabaseUser();
 
     const userAvatar = user.value.user_metadata.avatar_url || 1;
-
+    
+    useSeoMeta({
+        title: 'Пост | W',
+    });
     const { data: posts } = await useAsyncData('posts', async () => {
     const { data } = await supabase.from('posts')
         .select(`
@@ -25,9 +28,51 @@
         .eq("id", router.params.postId);
     return data;
 });
-useSeoMeta({
-    title: 'Пост | W',
-});
+const postLike = async (id) => {
+    const { data: postData, error: fetchError } = await supabase
+        .from('posts')
+        .select('likes_count, users_who_liked')
+        .eq('id', id)
+        .single();
+
+    if (fetchError) {
+        throw fetchError;
+    }
+
+    //this i need but not now
+    // const currentLikesCount = postData.likes_count || 0;
+    const usersWhoLiked = postData.users_who_liked ? JSON.parse(postData.users_who_liked) : [];
+
+    const userIndex = usersWhoLiked.indexOf(user.value.id);
+
+    if (userIndex === -1) {
+        usersWhoLiked.push(user.value.id);
+    } else {
+        usersWhoLiked.splice(userIndex, 1);
+    }
+
+    const updatedLikesCount = usersWhoLiked.length;
+
+    const updatedData = await supabase
+        .from('posts')
+        .update({
+            likes_count: updatedLikesCount,
+            users_who_liked: JSON.stringify(usersWhoLiked),
+        })
+        .eq('id', id)
+        .single();
+
+    if (updatedData.error) {
+        throw updatedData.error;
+    }
+
+    return updatedLikesCount;
+};
+
+const handleLike = async (post) => {
+    post.likes_count = await postLike(post.id);
+};
+
 </script>
 
 <template>
@@ -77,7 +122,7 @@ useSeoMeta({
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button"></div>
+                        <div class="likes-button" @click="postLike(post.id); handleLike(post)" ></div>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <!-- i guess i need to remove this from post view -->

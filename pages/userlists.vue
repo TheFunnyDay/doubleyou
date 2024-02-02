@@ -20,7 +20,7 @@
                 <NuxtLink :to="'/user/' + profile.nickname">
                     <div class="user-cover" 
                     :style="'background-image: url(' + profile.cover_url + ')'"
-                    v-if="profile.cover_url !== null && (profile.is_verification === true || profile.is_premium=== true)">
+                    v-if="profile.cover_url !== null && profile.is_premium=== true">
                     </div>
                     <div class="user"
                         :style="

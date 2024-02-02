@@ -86,7 +86,6 @@ const handleUserMetaUpdate = async () => {
         background-position: center;
         background-repeat: no-repeat;
         border-radius: 25px;
-
     }
     #profile-setting {
         padding-inline: 20px;
@@ -100,12 +99,11 @@ const handleUserMetaUpdate = async () => {
             flex-direction: column;
             align-items: center;
             #user-avatar {
-                outline: 5px solid var(--main-color);
+                outline: 2px solid var(--main-outline-color);
                 border-radius: 100%;
                 width: 150px;
                 height: 150px;
                 background-color: var(--main-bg-color);
-                // background-image: url('https://i.pinimg.com/originals/03/d8/7b/03d87b05c68faf9770ff5c574545a3f7.jpg');
                 background-size: cover;
                 background-position: center;
                 background-repeat: no-repeat;
