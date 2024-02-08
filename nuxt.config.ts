@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     ],
     modules: [
         '@nuxtjs/supabase',
-        '@nuxt/image'
+        '@nuxt/image',
     ],
     supabase: {
         redirectOptions: {
@@ -16,5 +16,5 @@ export default defineNuxtConfig({
     },
     app: {
         pageTransition: { name: 'page', mode: 'out-in' }
-    }
+    },
 })

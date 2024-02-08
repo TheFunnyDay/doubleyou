@@ -1,17 +1,17 @@
 <script setup>
-    const user = useSupabaseUser();
-    const supabase = useSupabaseClient();
-    const post_text = ref(null)
-    const post_image = ref(null)
-    const userAvatar = user.value.user_metadata.avatar_url
-    definePageMeta({
-        middleware: ['auth']
-    })
-    useSeoMeta({
-        title: 'Главная страница | W',
-    });
-    // import postData from "~/assets/posts.json";
-    // console.log(user.value)
+const user = useSupabaseUser();
+const supabase = useSupabaseClient();
+const post_text = ref(null)
+const post_image = ref(null)
+const userAvatar = user.value.user_metadata.avatar_url
+definePageMeta({
+    middleware: ['auth']
+})
+useSeoMeta({
+    title: 'Главная страница | W',
+});
+// import postData from "~/assets/posts.json";
+// console.log(user.value)
 const { data: posts } = await useAsyncData('posts', async () => {
     const { data } = await supabase.from('posts')
         .select(`
@@ -20,6 +20,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
             post_text,
             post_image,
             likes_count,
+            is_reply_to,
             profiles (
                 nickname,
                 fullname,
@@ -102,21 +103,11 @@ const handleLike = async (post) => {
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
             <form @submit.prevent="createPost">
-                <textarea 
-                    placeholder="Что нового?"
-                    maxlength="263" 
-                    type="text"
-                    v-model="post_text"
-                ></textarea>
+                <textarea placeholder="Что нового?" maxlength="263" type="text" v-model="post_text"></textarea>
                 <div id="post-input-container">
                     <div class="post-input-button">
-                        <input 
-                            id="post-add-image" 
-                            class="main-input" 
-                            v-model="post_image"
-                            placeholder="Ссылка на картинку"
-                            style="text-align: center;"
-                        >
+                        <input id="post-add-image" class="main-input" v-model="post_image" placeholder="Ссылка на картинку"
+                            style="text-align: center;">
                     </div>
                     <div class="post-input-button">
                         <input class="button" type="submit" value="Опубликовать">
@@ -128,18 +119,14 @@ const handleLike = async (post) => {
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">
-                        <div class="avatar" 
-                        
-                        :style="
-                        [
-                            {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
-                            [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
-                        ]"
-                        @click="$router.push('/user/' + post.profiles.nickname)"
-                        >
+                        <div class="avatar" :style="[
+                                { backgroundImage: 'url(' + post.profiles.avatar_url + ')' },
+                                [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false]
+                            ]" @click="$router.push('/user/' + post.profiles.nickname)">
                         </div>
-                        <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
-                            <div class="post-user-flname">{{ post.profiles.fullname }}
+                        <div class="nickname-container">
+                            <div class="post-user-flname" @click="$router.push('/user/' + post.profiles.nickname)">{{
+                                post.profiles.fullname }}
                                 <span v-if="post.profiles.is_verification === true"
                                     style="height: 14px;width: 14px; margin-left: 5px;">
                                     <span class="checkcheck"></span>
@@ -149,11 +136,19 @@ const handleLike = async (post) => {
                                     <span class="checkpremium"></span>
                                 </span>
                             </div>
-                            <div class="post-user-nickname">@{{ post.profiles.nickname }}</div>
+                            <div class="post-user-nickname">
+                                <span @click="$router.push('/user/' + post.profiles.nickname)">
+                                    @{{ post.profiles.nickname }}
+                                </span>
+                                <span v-if="post.is_reply_to !== null" @click="$router.push('/post/' + post.is_reply_to)"
+                                    class="post-reply">
+                                    Ответил на пост
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="post-created-at">
-                        <span>     
+                        <span>
                             {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
@@ -162,14 +157,16 @@ const handleLike = async (post) => {
                     </div>
                 </div>
                 <div class="post-content">
-                    <p v-if="post.post_text !== null" class="post-text" v-text="post.post_text" @click="$router.push('/post/' + post.id)"></p>
+                    <p v-if="post.post_text !== null" class="post-text" v-text="post.post_text"
+                        @click="$router.push('/post/' + post.id)"></p>
+
                     <span class="post-image" v-if="post.post_image !== null" @click="$router.push('/post/' + post.id)">
                         <img :src="post.post_image">
                     </span>
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button" @click="postLike(post.id); handleLike(post)" ></div>
+                        <div class="likes-button" @click="postLike(post.id); handleLike(post)"></div>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
@@ -196,12 +193,14 @@ const handleLike = async (post) => {
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
         padding: 18px;
+
         form {
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             margin-left: 18px;
+
             textarea {
                 overflow-y: auto;
                 padding-block: 10px;
@@ -216,32 +215,39 @@ const handleLike = async (post) => {
                 font-size: 18px;
                 resize: vertical;
             }
+
             #post-input-container {
                 display: flex;
                 justify-content: flex-end;
                 margin-top: 18px;
+
                 #post-add-image {
                     cursor: default;
                     width: 40px;
                     border-radius: 15px !important;
                     padding: 10px 15px 10px 15px !important;
                     transition: .3s;
+
                     &:hover {
                         cursor: text;
                         width: 90px;
                     }
+
                     &:focus {
                         width: 200px;
                     }
                 }
+
                 .post-input-button {
                     display: flex;
+
                     &:not(:first-child) {
                         margin-left: 10px;
                     }
                 }
             }
         }
+
         .avatar {
             width: 40px;
             height: 40px;
@@ -260,5 +266,6 @@ const handleLike = async (post) => {
         width: 100%;
         max-width: 646px;
     }
-}</style>
+}
+</style>
 

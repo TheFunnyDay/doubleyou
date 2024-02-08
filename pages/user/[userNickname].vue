@@ -15,7 +15,7 @@ const { data: user } = await useAsyncData('profiles', async () => {
         .select('*')
         .eq('nickname', route.params.userNickname)
         .single();
-        if (error) throw error
+    if (error) throw error
     return data;
 });
 
@@ -29,6 +29,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
             post_image,
             author_id,
             likes_count,
+            is_reply_to,
             profiles (
                 nickname,
                 fullname,
@@ -40,8 +41,8 @@ const { data: posts } = await useAsyncData('posts', async () => {
 
         .eq("author_id", user.value.id)
         .order('created_at', { ascending: false })
-        if (error) throw error
-        return data;
+    if (error) throw error
+    return data;
 });
 
 </script>
@@ -49,15 +50,13 @@ const { data: posts } = await useAsyncData('posts', async () => {
 <template>
     <div id="wall-content">
         <Header :title="route.params.userNickname" />
-        <div id="user-info"  style="color: white">
+        <div id="user-info" style="color: white">
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
-                <div id="userAvatar"                         
-                    :style="
-                        [
-                            {backgroundImage: 'url(' + user.avatar_url + ')'},
-                            [user.is_premium ? ('outline: 2px solid var(--highlight-color)') : 'outline: 2px solid var(--main-outline-color)' ]
-                        ]">
+                <div id="userAvatar" :style="[
+                        { backgroundImage: 'url(' + user.avatar_url + ')' },
+                        [user.is_premium ? ('outline: 2px solid var(--highlight-color)') : 'outline: 2px solid var(--main-outline-color)']
+                    ]">
                 </div>
                 <div id="user-name-desc">
                     <span id="user-fullname">
@@ -89,17 +88,14 @@ const { data: posts } = await useAsyncData('posts', async () => {
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">
-                        <div class="avatar"       
-                            @click="$router.push('/user/' + post.profiles.nickname)"                  
-                            :style="
-                            [
-                                {backgroundImage: 'url(' + post.profiles.avatar_url + ')'},
-                                [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false ]
-                            ]"
-                        >
+                        <div class="avatar" @click="$router.push('/user/' + post.profiles.nickname)" :style="[
+                                { backgroundImage: 'url(' + post.profiles.avatar_url + ')' },
+                                [post.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false]
+                            ]">
                         </div>
-                        <div class="nickname-container" @click="$router.push('/user/' + post.profiles.nickname)">
-                            <div class="post-user-flname">{{ post.profiles.fullname }}
+                        <div class="nickname-container">
+                            <div class="post-user-flname" @click="$router.push('/user/' + post.profiles.nickname)">{{
+                                post.profiles.fullname }}
                                 <span v-if="post.profiles.is_verification === true"
                                     style="height: 14px;width: 14px; margin-left: 5px;">
                                     <span class="checkcheck"></span>
@@ -109,11 +105,19 @@ const { data: posts } = await useAsyncData('posts', async () => {
                                     <span class="checkpremium"></span>
                                 </span>
                             </div>
-                            <div class="post-user-nickname">@{{ post.profiles.nickname }}</div>
+                            <div class="post-user-nickname">
+                                <span @click="$router.push('/user/' + post.profiles.nickname)">
+                                    @{{ post.profiles.nickname }}
+                                </span>
+                                <span v-if="post.is_reply_to !== null" @click="$router.push('/post/' + post.is_reply_to)"
+                                    class="post-reply">
+                                    Ответил на пост
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div class="post-created-at">
-                        <span>     
+                        <span>
                             {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
@@ -151,12 +155,14 @@ const { data: posts } = await useAsyncData('posts', async () => {
     align-items: stretch;
     background-color: var(--main-color);
     outline: 1px solid var(--main-outline-color);
+
     #user-cover {
         width: 100%;
         height: 200px;
         background-size: cover;
         background-position: center;
         border-bottom: 1px solid var(--main-outline-color);
+
         @media (max-width: 780px) {
             max-height: 170px;
         }
@@ -204,9 +210,11 @@ const { data: posts } = await useAsyncData('posts', async () => {
         }
     }
 }
+
 #user-posts {
     width: 100%;
     max-width: 646px;
+
     #user-view-switcher {
         user-select: none;
         display: flex;
@@ -216,6 +224,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
         flex-direction: row;
         justify-content: space-around;
         overflow: hidden;
+
         .user-switch-to {
             display: flex;
             padding: 15px;
@@ -227,9 +236,11 @@ const { data: posts } = await useAsyncData('posts', async () => {
             align-items: center;
             justify-content: center;
             transition: .2s;
+
             &:hover {
                 color: black;
                 background-color: var(--highlight-color);
+
                 span {
                     color: black;
                 }
