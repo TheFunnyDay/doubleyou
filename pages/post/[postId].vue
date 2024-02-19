@@ -198,7 +198,7 @@ const createReply = async () => {
                             { backgroundImage: 'url(' + reply.profiles.avatar_url + ')' },
                             [reply.profiles.is_premium ? ('border: 2px solid var(--highlight-color)') : false]
                         ]"
-                        style="width: 40px !important; height: 40px !important;flex: 1 1 10px"
+                        style="width: 40px !important; height: 40px !important; flex: 1 1 10px"
                     ></div>
                     <div class="nickname-container" @click="$router.push('/user/' + reply.profiles.nickname)">
                         <div class="post-user-flname">{{ reply.profiles.fullname }}
@@ -210,8 +210,9 @@ const createReply = async () => {
                                 style="height: 14px;width: 14px; margin-left: 5px;">
                                 <span class="checkpremium"></span>
                             </span>
+                            
+                            <div class="reply-user-nickname" >@{{ reply.profiles.nickname }} </div>
                         </div>
-                        <!-- <div class="post-user-nickname">@{{ reply.profiles.nickname }}</div> -->
                     </div>
                 </div>
                 <div class="post-created-at">
@@ -295,5 +296,17 @@ const createReply = async () => {
         }
     }
 
+}
+
+.reply-user-nickname {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: var(--sub-text-color);
+    margin-left: 7px; 
+    font-weight: 400;
+    @media (max-width: 780px) {
+        display: none;
+    }
 }
 </style>
