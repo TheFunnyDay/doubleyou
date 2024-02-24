@@ -64,8 +64,6 @@ const postLike = async (id) => {
         throw fetchError;
     }
 
-    //this i need but not now
-    // const currentLikesCount = postData.likes_count || 0;
     const usersWhoLiked = postData.users_who_liked ? JSON.parse(postData.users_who_liked) : [];
 
     const userIndex = usersWhoLiked.indexOf(user.value.id);

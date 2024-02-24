@@ -4,7 +4,7 @@ useSeoMeta({
 });
 const loginBg = ref('');
 onMounted(() => {
-    const bgImages = ['login-bg.png', 'login-bg2.jpg', 'login-bg3.png', 'login-bg4.png', 'login-bg5.png', 'login-bg6.png'];
+    const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.jpg', 'login-bg5.jpg', 'login-bg10.jpg'];
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('/${randomImage}')`;
 });

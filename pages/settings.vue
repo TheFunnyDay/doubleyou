@@ -72,13 +72,22 @@ const handleUserMetaUpdate = async () => {
             </div>
         </div>
         <div class="content">
-            <h1>Тут ничего нет</h1>
+            <h1>Настройка цветовой схемы</h1>
+            <div class="color-setup">
+                <div class="button" style="background-color: #000;">Амолед</div>
+                <div class="button" style="background-color: rgb(28, 28, 28);">Темная</div>
+                <div class="button" style="background-color: #fff; color: black">Светлая</div>
+            </div>
         </div>
     </div>    
 </template>
 
 <style lang="scss">
-    #cover-setting {
+    .content {
+        h1 {
+            margin-bottom: 20px;
+        }
+        #cover-setting {
         width: 100%;
         height: 200px;
         background-image: url('https://wallpaperaccess.com/full/723583.jpg');
@@ -87,26 +96,43 @@ const handleUserMetaUpdate = async () => {
         background-repeat: no-repeat;
         border-radius: 25px;
     }
-    #profile-setting {
-        padding-inline: 20px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        #user-avatar-setting {
+        #profile-setting {
+            padding-inline: 20px;
             display: flex;
-            position: relative;
-            bottom: 100px;
-            flex-direction: column;
+            flex-direction: row;
+            justify-content: space-between;
+            #user-avatar-setting {
+                display: flex;
+                position: relative;
+                bottom: 100px;
+                flex-direction: column;
+                align-items: center;
+                #user-avatar {
+                    outline: 2px solid var(--main-outline-color);
+                    border-radius: 100%;
+                    width: 150px;
+                    height: 150px;
+                    background-color: var(--main-bg-color);
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                }
+            }
+        }
+        .color-setup {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             align-items: center;
-            #user-avatar {
-                outline: 2px solid var(--main-outline-color);
-                border-radius: 100%;
-                width: 150px;
-                height: 150px;
-                background-color: var(--main-bg-color);
-                background-size: cover;
-                background-position: center;
-                background-repeat: no-repeat;
+            .button {
+                &:not(:first-child) {
+                    margin-left: 10px;
+                }
+                &:hover {
+                    color: black;
+                    outline-color: var(--highlight-color);
+                    background-color: var(--highlight-color) !important;
+                }
             }
         }
     }
