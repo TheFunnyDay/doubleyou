@@ -16,7 +16,7 @@ onMounted(() => {
         <div class="content" :style="{ backgroundImage: loginBg }" style="background-size: cover;">
             <div style="display: flex; align-items: center;">
                 <img src="/doubleyou-logo-white.png" width="100">
-                <h1 style="margin-left: 10px; font-size: 2em;">DoubleYou Премиум</h1>
+                <h1 style="margin-left: 10px; font-size: 2em; color: white;">DoubleYou Премиум</h1>
             </div>
         </div>
         <div class="content">

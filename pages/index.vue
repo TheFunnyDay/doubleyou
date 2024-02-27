@@ -204,7 +204,7 @@ const handleLike = async (post) => {
             textarea {
                 overflow-y: auto;
                 padding-block: 10px;
-                color: white;
+                color: var(--main-text-color);
                 outline: none;
                 min-width: calc(100% - 40px);
                 max-height: 500px;

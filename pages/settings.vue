@@ -1,10 +1,18 @@
 <script setup>
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
+const amoledTheme = ` --main-bg-color: #000000; --main-text-color: #ffffff; --sub-text-color: #ABABAB; --sub-text-color-hover: #000000; --main-color: #000000; --main-color-alpha: rgba(29, 29, 29, 0.8); --sub-color-alpha: rgba(0, 0, 0, 0.8); --sub-color: #0f0f0f; --main-outline-color: #2f3633; --main-border-color: #3f3f3f; --highlight-color: #00dc82; --highlight-color-alpha: #1a2923; --highlight-color-sub: #7a7a7a; --invert: 0;`;
+const whiteTheme = `--main-bg-color: #ffffff; --main-text-color: #000000; --sub-text-color: #696969; --sub-text-color-hover: #898989; --main-color: #ffffff; --main-color-alpha: rgb(189 189 189 / 80%); --sub-color-alpha: rgb(255 255 255 / 80%); --sub-color: #e3e3e3; --main-outline-color: #bfbfbf; --main-border-color: #bfbfbf; --highlight-color: #00dc82; --highlight-color-alpha: #b4ffe1; --highlight-color-sub: #7a7a7a; --invert: 1;`
+const darkTheme = `--main-bg-color: #212121; --main-text-color: #ffffff; --sub-text-color: #9f9f9f; --sub-text-color-hover: #898989; --main-color: #212121; --main-color-alpha: rgb(57 57 57 / 80%); --sub-color-alpha: rgb(30 30 30 / 80%); --sub-color: #272727; --main-outline-color: #3b3b3b; --main-border-color: #3b3b3b; --highlight-color: #00dc82; --highlight-color-alpha: #2c3531; --highlight-color-sub: #7a7a7a; --invert: 0;`
 
 useSeoMeta({
     title: 'Настройки профиля | W',
 });
+//Применить тему
+const setTheme = (theme) => {
+    localStorage.setItem('userTheme', theme);
+    document.querySelector("html").style.cssText = theme;
+}
 
 const { data: profile } = await useAsyncData('profiles', async () => {
     const { data } = await supabase.from('profiles')
@@ -74,9 +82,9 @@ const handleUserMetaUpdate = async () => {
         <div class="content">
             <h1>Настройка цветовой схемы</h1>
             <div class="color-setup">
-                <div class="button" style="background-color: #000;">Амолед</div>
-                <div class="button" style="background-color: rgb(28, 28, 28);">Темная</div>
-                <div class="button" style="background-color: #fff; color: black">Светлая</div>
+                <div class="button" style="background-color: #000; color: white" @click="setTheme(amoledTheme)">Амолед</div>
+                <div class="button" style="background-color: rgb(28, 28, 28); color: white" @click="setTheme(darkTheme)">Темная</div>
+                <div class="button" style="background-color: #fff; color: black" @click="setTheme(whiteTheme)">Светлая</div>
             </div>
         </div>
     </div>    

@@ -34,12 +34,13 @@ const toggleMobileMenu = () => {
     width: 100%;
     max-width: 646px;
     overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: var(--sub-color-alpha);
     -webkit-backdrop-filter: blur(25px);
     backdrop-filter: blur(25px);
     outline: 1px solid var(--main-outline-color);
     padding: 14px 20px 15px 20px;
     #mobile-menu-icon {
+        filter: invert(var(--invert));
         cursor: pointer;
         display: block;
         position: relative;
@@ -57,6 +58,7 @@ const toggleMobileMenu = () => {
         }
     }
     #header-title {
+        color: var(--main-text-color);
         font-size: 24px;
         overflow: hidden;
         text-overflow: ellipsis;

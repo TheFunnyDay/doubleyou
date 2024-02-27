@@ -97,14 +97,14 @@
         }
         .user-cover {
             width: 100%;
-            height: 150px;
+            height: 200px;
             background-size: cover;
             background-position: center;
             border-bottom: 1px solid var(--main-outline-color);
         }
         .user {
             display: flex;
-            color: white;
+            color: var(--main-text-color);
             padding: 20px;
             transition: background-color .3s;
             .avatar {
