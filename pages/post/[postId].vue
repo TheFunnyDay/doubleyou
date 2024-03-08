@@ -5,7 +5,11 @@ const user = useSupabaseUser();
 
 const userAvatar = user.value.user_metadata.avatar_url || 1;
 const post_text = ref(null)
+const viewImageToggle = ref(false);
 
+const ToggleView = () => {
+    viewImageToggle.value = !viewImageToggle.value
+}
 useSeoMeta({
     title: 'Пост | W',
 });
@@ -119,6 +123,16 @@ const createReply = async () => {
 
 <template>
     <div id="wall-content" class="user-post">
+        <ViewImage 
+            v-if="viewImageToggle"
+            :ToggleView="() => ToggleView()"
+            :image="posts[0].post_image"
+            :authorName="posts[0].profiles.fullname"
+            :authorAvatar="posts[0].profiles.avatar_url"
+            :premium="posts[0].profiles.is_premium"
+            :verified="posts[0].profiles.is_verification"
+            :postText="posts[0].post_text"
+        />   
         <Header title="Пост" />
         <div class="post" v-for="post in posts" :key="post.id">
             <div class="user-info-container">
@@ -163,10 +177,8 @@ const createReply = async () => {
             </div>
             <div class="post-content">
                 <p class="post-text" v-if="post.post_text !== null" v-text="post.post_text"></p>
-                <span class="post-image" v-if="post.post_image !== null">
-                    <a :href="post.post_image" target="_blank">
+                <span class="post-image" v-if="post.post_image !== null" @click="ToggleView()">
                         <img :src="post.post_image">
-                    </a>
                 </span>
             </div>
             <div class="post-footer">

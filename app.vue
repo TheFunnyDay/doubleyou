@@ -9,12 +9,14 @@ const user = useSupabaseUser();
     <div id="app"> 
         <div v-if="user" style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
             <div id="left">
-                <SideMenusLeft />
+                <MenuLeft />
             </div>
 
                 <NuxtPage />
+                <MenuMobile />
+                
             <div id="right">
-                <SideMenusRight />
+                <MenuRight />
             </div>
         </div>
         <AuthPage v-else/>
@@ -58,13 +60,13 @@ const user = useSupabaseUser();
                 padding-left: 10px;
             }
         }
-        @media (max-width: 615px) {
+        @media (max-width: 633px) {
             #right {
                 flex: 0;
                 padding-left: 0;
             }
         }
-        @media (max-width: 615px) {
+        @media (max-width: 633px) {
             #left {
                 flex: 0;
             }

@@ -52,8 +52,9 @@ p {
         @media (max-width: 780px) {
             flex: 0 1 550px;
         }
-        @media (max-width: 615px) {
+        @media (max-width: 633px) {
             flex: 1 1 100%;
+            padding-bottom: 71px;
         }
     }
 }
@@ -315,6 +316,12 @@ p {
 .router-link-active {
     background-color: var(--main-color-alpha);
     outline: 1px solid var(--main-outline-color);
+    &.mobileNav {
+        border-radius: 2px;
+        background-color: transparent;
+        outline: none;
+        border-bottom: 2px solid var(--highlight-color);
+    }
 }
 .not-available {
     color: var(--sub-text-color);

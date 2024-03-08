@@ -1,5 +1,11 @@
 # W | DoubleYou TODO
 - [ ] Update post footer to component
+- [ ] Live wall (mean main page) update when post 
+- [ ] Button for see new posts (like X(Twitter) do)
+- [ ] Update 'about' & 'premium' pages design 
+- [ ] Display reply post (i guess thats need redesign)
+- [ ] More pics in post (?how)
+- [ ] YT video in post (works only with yt-video url)
 - [x] Add a script to add users who liked the post to the database
 - [x] Add live likes update
 - [x] Complete about page

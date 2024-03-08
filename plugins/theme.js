@@ -6,5 +6,4 @@ export default defineNuxtPlugin(() => {
         }
         document.querySelector("html").style.cssText = localStorage.getItem("userTheme")
     }
-    
 })

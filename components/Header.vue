@@ -49,7 +49,7 @@ const toggleMobileMenu = () => {
         height: 29px;
         transition: left .5s, filter .1s;
         transition-delay: filter .5s;
-        @media (max-width: 615px) {
+        @media (max-width: 633px) {
             left: 0;
             width: auto;
         }
@@ -63,7 +63,7 @@ const toggleMobileMenu = () => {
         overflow: hidden;
         text-overflow: ellipsis;
         transition: margin-left .5s;
-        @media (max-width: 615px) {
+        @media (max-width: 633px) {
             margin-left: 15px;
         }
     }
