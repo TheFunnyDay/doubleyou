@@ -6,6 +6,7 @@ const user = useSupabaseUser();
 const userAvatar = user.value.user_metadata.avatar_url || 1;
 const post_text = ref(null)
 const viewImageToggle = ref(false);
+const togglePopup = ref(false);
 
 const ToggleView = () => {
     viewImageToggle.value = !viewImageToggle.value
@@ -115,7 +116,32 @@ const createReply = async () => {
         .select()
         .single();
     if (error) throw error;
-    post_text.value = '';
+    post_text.value = null;
+
+    const { data: updatedReplies } = await supabase.from('posts')
+        .select(`
+            id,
+            created_at,
+            post_text,
+            post_image,
+            likes_count,
+            is_reply_to,
+            profiles (
+                nickname,
+                fullname,
+                avatar_url,
+                is_premium,
+                is_verification
+            )
+        `)
+        .eq("is_reply_to", router.params.postId)
+        .order("created_at", { ascending: false });
+
+    replies.value = updatedReplies;
+    togglePopup.value = !togglePopup.value
+    setTimeout(() => {
+        togglePopup.value = !togglePopup.value
+    }, 3000)
     return data;
 };
 
@@ -123,6 +149,7 @@ const createReply = async () => {
 
 <template>
     <div id="wall-content" class="user-post">
+        <ModalPopup v-if="togglePopup">Комментарий опубликован</ModalPopup>
         <ViewImage 
             v-if="viewImageToggle"
             :ToggleView="() => ToggleView()"
@@ -195,7 +222,7 @@ const createReply = async () => {
         </div>
         <div id="comments-con" class="content" style="text-align: center;">
             <div id="cooments-con-user-avatar" :style="{ backgroundImage: 'url(' + userAvatar + ')' }"></div>
-            <form @submit="createReply">
+            <form @submit.prevent="createReply">
                 <input type="text" maxlength="263" placeholder="Ответить..." v-model="post_text">
             </form>
         </div>

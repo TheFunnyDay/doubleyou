@@ -6,8 +6,8 @@ const user = useSupabaseUser();
 </script>
 
 <template>
-    <div id="app"> 
-        <div v-if="user" style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
+    <div id="app" v-if="user"> 
+        <div  style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
             <div id="left">
                 <MenuLeft />
             </div>
@@ -19,8 +19,11 @@ const user = useSupabaseUser();
                 <MenuRight />
             </div>
         </div>
-        <AuthPage v-else/>
-
+    </div>
+    <div id="app" v-else>
+        <ClientOnly>
+            <AuthPage />
+        </ClientOnly>
     </div>
 </template>
 <style lang="scss">

@@ -1,6 +1,7 @@
 # W | DoubleYou TODO
 - [ ] Update post footer to component
 - [ ] Live wall (mean main page) update when post 
+- [x] Live update just now added comment
 - [ ] Button for see new posts (like X(Twitter) do)
 - [ ] Update 'about' & 'premium' pages design 
 - [ ] Display reply post (i guess thats need redesign)

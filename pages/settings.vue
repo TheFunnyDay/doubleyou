@@ -8,6 +8,9 @@ const darkTheme = `--main-bg-color: #212121; --main-text-color: #ffffff; --sub-t
 useSeoMeta({
     title: 'Настройки профиля | W',
 });
+
+const togglePopup = ref(false);
+const disabledSave = ref(false);
 //Применить тему
 const setTheme = (theme) => {
     localStorage.setItem('userTheme', theme);
@@ -42,7 +45,15 @@ const handleUserMetaUpdate = async () => {
         }
     })
     if (error) throw error 
-    alert('Данные успешно изменены')
+    togglePopup.value = !togglePopup.value
+    disabledSave.value = true
+    document.querySelector("#cover-setting").style.backgroundImage = `url(${userCover.value})`
+    document.querySelector("#user-avatar").style.backgroundImage = `url(${userAvatar.value})`
+    setTimeout(() => {
+        togglePopup.value = !togglePopup.value
+        disabledSave.value = false
+    }, 3000)
+    
     } catch (error) {
         alert(error.error_description || error.message)
     }
@@ -53,6 +64,7 @@ const handleUserMetaUpdate = async () => {
 
 <template>
     <div id="wall-content">
+        <ModalPopup v-if="togglePopup">Настройки сохранены</ModalPopup>
         <Header title="Настройки"/>
         <div class="content">
             <h1>Настройки профиля</h1>
@@ -61,8 +73,8 @@ const handleUserMetaUpdate = async () => {
                 <div id="user-avatar-setting">
                     <div id="user-avatar" :style="'background-image: url(' + profile.avatar_url + ')'"></div>
                 </div>
-                <div style="width:65%;">
-                    <form @submit="handleUserMetaUpdate">
+                <div id="settings-section">
+                    <form @submit.prevent="handleUserMetaUpdate">
                         <p>ФИО</p>
                         <input type="text" name="" v-model="userFullname" class="main-input" />
                         <p class="main-margin">Никнейм</p>
@@ -73,7 +85,7 @@ const handleUserMetaUpdate = async () => {
                         <input type="text" name="" v-model="userAvatar" class="main-input" />
                         <p class="main-margin">Обложка</p>
                         <input type="text" name="" v-model="userCover" class="main-input" />
-                        <input type="submit" value="Сохранить" class="button main-margin">
+                        <input type="submit" :disabled="disabledSave"  value="Сохранить" class="button main-margin">
                     </form>
                         
                 </div>
@@ -96,25 +108,40 @@ const handleUserMetaUpdate = async () => {
             margin-bottom: 20px;
         }
         #cover-setting {
-        width: 100%;
-        height: 200px;
-        background-image: url('https://wallpaperaccess.com/full/723583.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        border-radius: 25px;
-    }
+            width: 100%;
+            height: 200px;
+            background-image: url('https://wallpaperaccess.com/full/723583.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border-radius: 25px;
+        }
         #profile-setting {
             padding-inline: 20px;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
+            @media (max-width: 633px) {
+                position: relative;
+                flex-direction: column;
+                align-items: center;
+                bottom: 100px;
+            }
+            #settings-section {
+                width: 65%;
+                @media (max-width: 633px) {
+                    width: 100%;
+                }
+            }
             #user-avatar-setting {
                 display: flex;
                 position: relative;
                 bottom: 100px;
                 flex-direction: column;
                 align-items: center;
+                @media (max-width: 633px) {
+                    bottom: 0px;
+                }
                 #user-avatar {
                     outline: 2px solid var(--main-outline-color);
                     border-radius: 100%;

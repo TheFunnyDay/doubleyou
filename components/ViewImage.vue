@@ -39,7 +39,7 @@ const props = defineProps({
                     </div>
                 </div>
             </div>
-            <div class="post-text" v-text="postText">
+            <div class="post-text" v-if="postText" v-text="postText" >
             </div>
         </div>
     </div>

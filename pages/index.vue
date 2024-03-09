@@ -4,9 +4,9 @@ const supabase = useSupabaseClient();
 const post_text = ref(null)
 const post_image = ref(null)
 const userAvatar = user.value.user_metadata.avatar_url
-definePageMeta({
-    middleware: ['auth']
-})
+// definePageMeta({
+//     middleware: ['auth']
+// })
 useSeoMeta({
     title: 'Главная страница | W',
 });
