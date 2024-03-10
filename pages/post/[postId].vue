@@ -160,8 +160,9 @@ const createReply = async () => {
             :verified="posts[0].profiles.is_verification"
             :postText="posts[0].post_text"
         />   
-        <Header title="Пост" />
-        <div class="post" v-for="post in posts" :key="post.id">
+        <Header title="Пост"/>
+        <Loading v-if="!posts"/>
+        <div class="post" v-for="post in posts" :key="post.id" v-else>
             <div class="user-info-container">
                 <div class="user-main-info">
                     <div class="avatar" @click="$router.push('/user/' + post.profiles.nickname)" :style="[

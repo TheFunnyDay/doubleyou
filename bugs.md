@@ -1,5 +1,5 @@
 # W | Bugs 
-🗿 - maybe I fix thah
+🗿 - maybe I fix that
 ❌ - I can't fix that
 ✔️ - fixed
 

@@ -9,19 +9,15 @@ useSeoMeta({
     title: '@' + route.params.userNickname + ' | W',
 });
 
-const { data: user } = await useAsyncData('profiles', async () => {
-    const { data, error } = await supabase
+    const { data: user } = await supabase
         .from('profiles')
         .select('*')
         .eq('nickname', route.params.userNickname)
         .single();
-    if (error) throw error
-    return data;
-});
 
 
-const { data: posts } = await useAsyncData('posts', async () => {
-    const { data, error } = await supabase.from('posts')
+// const userPosts = user.value.id
+    const { data: posts } = await supabase.from('posts')
         .select(`
             id,
             created_at,
@@ -39,18 +35,16 @@ const { data: posts } = await useAsyncData('posts', async () => {
             )
         `)
 
-        .eq("author_id", user.value.id)
+        .eq("author_id", user.id)
         .order('created_at', { ascending: false })
-    if (error) throw error
-    return data;
-});
-
 </script>
 
 <template>
-    <div id="wall-content">
+
+    <div id="wall-content" min-width="643px">
         <Header :title="route.params.userNickname" />
-        <div id="user-info" style="color: white">
+        <Loading v-if="!user" />
+        <div id="user-info" style="color: white" v-else>
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
                 <div id="userAvatar" :style="[
@@ -73,7 +67,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
                 </div>
             </div>
         </div>
-        <div id="user-posts">
+        <div id="user-posts" >
             <div id="user-view-switcher">
                 <div class="user-switch-to">
                     <span>Посты</span>

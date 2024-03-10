@@ -15,4 +15,7 @@ export default defineNuxtConfig({
             callback: '/',
         }
     },
+    //Uncomment in release
+    
+    // ssr: false
 })

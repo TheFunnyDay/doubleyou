@@ -100,6 +100,7 @@ const handleLike = async (post) => {
 <template>
     <div id="wall-content">
         <Header title="Главная" />
+
         <div id="create-content">
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
             <form @submit.prevent="createPost">
@@ -115,7 +116,8 @@ const handleLike = async (post) => {
                 </div>
             </form>
         </div>
-        <div id="posts">
+        <Loading v-if="!posts"/>
+        <div id="posts" v-else>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
                     <div class="user-main-info">

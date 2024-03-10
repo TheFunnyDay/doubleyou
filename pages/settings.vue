@@ -8,7 +8,7 @@ const darkTheme = `--main-bg-color: #212121; --main-text-color: #ffffff; --sub-t
 useSeoMeta({
     title: 'Настройки профиля | W',
 });
-
+ 
 const togglePopup = ref(false);
 const disabledSave = ref(false);
 //Применить тему
@@ -18,13 +18,13 @@ const setTheme = (theme) => {
 }
 
 const { data: profile } = await useAsyncData('profiles', async () => {
-    const { data } = await supabase.from('profiles')
+    const { data } = await supabase
+        .from('profiles')
         .select(`
             "avatar_url",
             "cover_url"
         `)
         .eq("id", user.value.id)
-        .limit(1)
         .single();
     return data;
 });
@@ -59,14 +59,15 @@ const handleUserMetaUpdate = async () => {
     }
 }
 
-// console.log(user.value)
+
 </script>
 
 <template>
     <div id="wall-content">
         <ModalPopup v-if="togglePopup">Настройки сохранены</ModalPopup>
         <Header title="Настройки"/>
-        <div class="content">
+        <div v-if="!profile">Loading...</div>
+        <div class="content" v-else>
             <h1>Настройки профиля</h1>
             <div id="cover-setting" class="main-margin" :style="'background-image: url(' + profile.cover_url + ')'"></div>
             <div class="main-margin" id="profile-setting">
