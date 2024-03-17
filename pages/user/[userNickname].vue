@@ -4,46 +4,58 @@ import { useRoute } from 'vue-router';
 
 const supabase = useSupabaseClient();
 const route = useRoute();
+const checkUser = useSupabaseUser();
+const authUserId = checkUser.value.id;
 
 useSeoMeta({
     title: '@' + route.params.userNickname + ' | W',
 });
 
-    const { data: user } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('nickname', route.params.userNickname)
-        .single();
-
+const randImage = ref('');
+onMounted(() => {
+    const bgImages = [
+        'https://media.tenor.com/ESNSzxKHiuEAAAAi/bird-seagull.gif', 
+        'https://media.tenor.com/ociZpU8b_Q8AAAAi/cat-meme.gif',
+        'https://media.tenor.com/k-9QNRTZhZsAAAAi/kzary.gif',
+        'https://media.tenor.com/xGcV-91vbeIAAAAi/kita-ikuyo-kita.gif',
+    ];
+    const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
+    randImage.value = randomImage;
+});
+const { data: user } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('nickname', route.params.userNickname)
+    .single();
 
 // const userPosts = user.value.id
-    const { data: posts } = await supabase.from('posts')
-        .select(`
-            id,
-            created_at,
-            post_text,
-            post_image,
-            author_id,
-            likes_count,
-            is_reply_to,
-            profiles (
-                nickname,
-                fullname,
-                avatar_url,
-                is_premium,
-                is_verification
-            )
-        `)
+const { data: posts } = await supabase.from('posts')
+    .select(`
+        id,
+        created_at,
+        post_text,
+        post_image,
+        author_id,
+        likes_count,
+        is_reply_to,
+        profiles (
+            nickname,
+            fullname,
+            avatar_url,
+            is_premium,
+            is_verification
+        )
+    `)
 
-        .eq("author_id", user.id)
-        .order('created_at', { ascending: false })
+    .eq("author_id", user.id)
+    .order('created_at', { ascending: false })
 </script>
 
 <template>
-
-    <div id="wall-content" min-width="643px">
-        <Header :title="route.params.userNickname" />
+    <div id="wall-content" >
+        <Header :title="user.nickname ? user.nickname : 'Пользователь'" />
         <Loading v-if="!user" />
+
         <div id="user-info" style="color: white" v-else>
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
@@ -53,16 +65,21 @@ useSeoMeta({
                     ]">
                 </div>
                 <div id="user-name-desc">
-                    <span id="user-fullname">
-                        {{ user.fullname }}
-                        <span v-if="user.is_verification === true" style="height: 20px;width: 20px; margin-left: 5px;">
-                            <span class="checkcheck"></span>
-                        </span>
-                        <span v-if="user.is_premium === true" style="height: 20px;width: 20px; margin-left: 5px;">
-                            <span class="checkpremium"></span>
-                        </span>
-                    </span>
-                    <span id="user-nickname">@{{ user.nickname }}</span>
+                    <div id="user-name-meta">
+                        <div style="display: flex;flex-direction: column;">
+                            <span id="user-fullname">
+                            {{ user.fullname }}
+                            <span v-if="user.is_verification === true" style="height: 20px;width: 20px; margin-left: 5px;">
+                                <span class="checkcheck"></span>
+                            </span>
+                            <span v-if="user.is_premium === true" style="height: 20px;width: 20px; margin-left: 5px;">
+                                <span class="checkpremium"></span>
+                            </span>
+                            </span>
+                        <span id="user-nickname">@{{ user.nickname }}</span>
+                        </div>
+                        <div id="user-follow" v-if="authUserId !== user.id">Подписаться</div>
+                    </div>
                     <span id="user-descript" v-text="user.descript"></span>
                 </div>
             </div>
@@ -78,6 +95,10 @@ useSeoMeta({
                 <div class="user-switch-to">
                     <span>Ответы</span>
                 </div>
+            </div>
+            <div id="user-no-posts" v-if="!posts.length">
+                У пользователя {{ user.fullname }}  нет никаких публикаций
+                <img :src="randImage" />
             </div>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
@@ -178,6 +199,9 @@ useSeoMeta({
             background-repeat: no-repeat;
             flex: 0 0 110px;
             background-color: #000000;
+            @media (max-width: 633px) {
+                bottom: 10px;
+            }
         }
 
         #user-name-desc {
@@ -185,22 +209,60 @@ useSeoMeta({
             margin-left: 20px;
             flex-direction: column;
             align-items: flex-start;
-
-            #user-fullname {
+            align-items: stretch;
+            width: 100%;
+            #user-name-meta {
                 display: flex;
-                font-size: 25px;
-                font-weight: 700;
-            }
+                justify-content: space-between;
+                align-items: center;
+                #user-fullname {
+                    display: flex;
+                    font-size: 25px;
+                    font-weight: 700;
+                }
 
-            #user-nickname {
-                font-size: 18px;
-                color: #ABABAB;
+                #user-nickname {
+                    font-size: 18px;
+                    color: #ABABAB;
+                }
+                #user-follow {
+                    font-size: 16px;
+                    color: var(--main-text-color);
+                    font-weight: 700;
+                    background-color: var(--highlight-color);
+                    padding: 7px;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    transition: .2s;
+                    color: black;
+                    outline: 1px solid var(--main-outline-color);
+                    &:hover {
+                        color: var(--main-text-color);
+                        background-color: var(--highlight-color-alpha);
+                    }
+                    &:active {
+                        background-color: var(--highlight-color-sub);                    
+                    }
+                    @media (max-width: 633px) {
+                        // text-overflow: ellipsis;
+                        font-size: 14px;
+                    }
+                }
             }
 
             #user-descript {
                 font-size: 16px;
                 margin-top: 10px;
             }
+            @media (max-width: 633px) {
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 633px) {
+            flex-direction: column;
+            position: relative;
+            bottom: 64px;
+            max-height: 185px;
         }
     }
 }
@@ -239,6 +301,25 @@ useSeoMeta({
                     color: black;
                 }
             }
+        }
+    }
+    #user-no-posts {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        outline: 1px solid var(--main-outline-color);
+        padding: 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--main-text-color);
+        text-align: center;
+        img {
+            margin-top: 20px;
+            width: 50%;
+            // min-width: 300px;
+            border-radius: 10px;
         }
     }
 }

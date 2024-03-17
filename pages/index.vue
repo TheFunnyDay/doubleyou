@@ -1,12 +1,10 @@
 <script setup>
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
-const post_text = ref(null)
-const post_image = ref(null)
+const post_text = ref('')
+const post_image = ref('')
 const userAvatar = user.value.user_metadata.avatar_url
-// definePageMeta({
-//     middleware: ['auth']
-// })
+
 useSeoMeta({
     title: 'Главная страница | W',
 });
@@ -34,8 +32,8 @@ const { data: posts } = await useAsyncData('posts', async () => {
 });
 
 const createPost = async () => {
-    if (!user) throw new Error('Пользователь не найдет');
-    if (post_text.value === null && !post_image.value) {
+    if (user === null) throw new Error('Пользователь не найдет');
+    if ((!post_text.value || !post_text.value.trim()) && (!post_image.value || !post_image.value.trim())) {
         alert("Пост не может быть пустым")
         return false;
     };
@@ -43,14 +41,18 @@ const createPost = async () => {
         .from('posts')
         .insert({
             author_id: user.value.id,
-            post_text: post_text.value,
-            post_image: post_image.value
+            post_text: post_text.value.trim() ? post_text.value : null,
+            post_image: post_image.value.trim() ? post_image.value : null
         })
         .select()
         .single();
     if (error) throw error;
     post_text.value = '';
     post_image.value = '';
+    
+    setTimeout(() => {
+        location.reload();
+    }, 1500)
     return data;
 };
 
@@ -102,21 +104,35 @@ const handleLike = async (post) => {
         <Header title="Главная" />
 
         <div id="create-content">
+            
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
             <form @submit.prevent="createPost">
                 <textarea placeholder="Что нового?" maxlength="263" type="text" v-model="post_text"></textarea>
+                <div id="progress" style="height: 5px; border-radius: 10px; margin-top: 5px; transition: .2s; background-color: var(--highlight-color);" 
+                :style="{
+                    width: 0 + (post_text.length / 263 * 100 + '%'),
+                    background: ( post_text.length > 132 && post_text.length < 263) ? 'orange' : post_text.length === 263 ? 'red' : 'var(--highlight-color)'
+                }">
+            </div>
                 <div id="post-input-container">
-                    <div class="post-input-button">
-                        <input id="post-add-image" class="main-input" v-model="post_image" placeholder="Ссылка на картинку"
-                            style="text-align: center;">
+                    <div id="post-char-counter" style="max-width: 100px;">
+                        <p
+                            :style="{ color: ( post_text.length > 132 && post_text.length < 263) ? 'orange' : post_text.length === 263 ? 'red' : 'var(--main-text-color)'}"
+                        >{{ post_text.length > 0 ? ( 263 - post_text.length ) : '' }}</p>
                     </div>
-                    <div class="post-input-button">
-                        <input class="button" type="submit" value="Опубликовать">
+                    <div style="display: flex;">
+                        <div class="post-input-button">
+                            <input id="post-add-image" class="main-input" v-model="post_image"
+                                placeholder="Ссылка на картинку" style="text-align: center;" />
+                        </div>
+                        <div class="post-input-button">
+                            <input class="button" type="submit" value="Опубликовать">
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
-        <Loading v-if="!posts"/>
+        <Loading v-if="!posts" />
         <div id="posts" v-else>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
@@ -142,8 +158,8 @@ const handleLike = async (post) => {
                                 <span @click="$router.push('/user/' + post.profiles.nickname)">
                                     @{{ post.profiles.nickname }}
                                 </span>
-                                <span v-if="post.is_reply_to !== null" @click="$router.push('/post/' + post.is_reply_to)"
-                                    class="post-reply">
+                                <span v-if="post.is_reply_to !== null"
+                                    @click="$router.push('/post/' + post.is_reply_to)" class="post-reply">
                                     Ответил на пост
                                 </span>
                             </div>
@@ -154,7 +170,8 @@ const handleLike = async (post) => {
                             {{ new Date(post.created_at).toLocaleDateString() }}
                         </span>
                         <span>
-                            {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }}
+                            {{ new Date(post.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                            }}
                         </span>
                     </div>
                 </div>
@@ -220,7 +237,8 @@ const handleLike = async (post) => {
 
             #post-input-container {
                 display: flex;
-                justify-content: flex-end;
+                justify-content: space-between;
+                align-items: center;
                 margin-top: 18px;
 
                 #post-add-image {

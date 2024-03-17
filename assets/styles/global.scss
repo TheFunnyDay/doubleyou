@@ -49,7 +49,7 @@ p {
         flex-wrap: nowrap;
         flex: 0 1 646px;
         transition: .3s;
-        @media (max-width: 780px) {
+        @media screen and (max-width: 780px) {
             flex: 0 1 550px;
         }
         @media (max-width: 633px) {
@@ -226,6 +226,7 @@ p {
         .post-text {
             color: var(--main-text-color);
             white-space: pre-line;
+            word-break: break-all;
             overflow: hidden;
         }
         .post-image {

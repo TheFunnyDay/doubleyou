@@ -66,7 +66,7 @@ const handleUserMetaUpdate = async () => {
     <div id="wall-content">
         <ModalPopup v-if="togglePopup">Настройки сохранены</ModalPopup>
         <Header title="Настройки"/>
-        <div v-if="!profile">Loading...</div>
+        <Loading v-if="!profile" />
         <div class="content" v-else>
             <h1>Настройки профиля</h1>
             <div id="cover-setting" class="main-margin" :style="'background-image: url(' + profile.cover_url + ')'"></div>

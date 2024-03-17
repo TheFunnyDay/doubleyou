@@ -27,7 +27,7 @@
     justify-content: space-around;
     @media (max-width: 633px) {
         backdrop-filter: blur(25px);
-        bottom: 0;
+        bottom: -1px;
     }
     .mobileNav {
         img {

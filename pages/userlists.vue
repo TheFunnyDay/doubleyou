@@ -5,10 +5,13 @@
 
     const supabase = useSupabaseClient();
 
-    let { data: profiles, error } = await supabase
-    .from('profiles')
-    .select('*').order('id', { ascending: true });
-
+    const { data: profiles } = await useAsyncData('profiles', async () => {
+        let { data, error } = await supabase
+        .from('profiles')
+        .select('*').order('id', { ascending: true });
+        if (error) throw error
+        return data
+    })
 </script>
 
 <template>
@@ -16,7 +19,8 @@
             <Header title="Пользователи"/>
             <div id="user-list-con">
                 <input type="text" placeholder="Поиск пользователя" id="users-search" />
-                <div class="user-in-list" v-for="profile in profiles" :key="profile.id">
+                <Loading v-if="!profiles || profiles.length === 0"/>
+                <div class="user-in-list" v-for="profile in profiles" :key="profile.id" v-else>
                 <NuxtLink :to="'/user/' + profile.nickname">
                     <div class="user-cover" 
                     :style="'background-image: url(' + profile.cover_url + ')'"

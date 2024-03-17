@@ -14,7 +14,7 @@ const toggleMobileMenu = () => {
 <template>
     <div id="header">
         <img 
-            src="@/icons/Menu.png" 
+            src="/icons/Menu.png" 
             alt="menu"
             id="mobile-menu-icon"
             height="27" 

@@ -6,7 +6,6 @@ export default defineNuxtConfig({
     ],
     modules: [
         '@nuxtjs/supabase',
-        '@nuxt/image',
     ],
     supabase: {
         redirect: false,

@@ -227,7 +227,7 @@ const createReply = async () => {
                 <input type="text" maxlength="263" placeholder="Ответить..." v-model="post_text">
             </form>
         </div>
-
+        <Loading v-if="!replies"/>
         <div class="post" v-if="replies" v-for="reply in replies" :key="reply.id">
             <div class="user-info-container">
                 <div class="user-main-info">

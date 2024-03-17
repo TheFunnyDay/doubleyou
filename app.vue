@@ -8,10 +8,10 @@ const user = useSupabaseUser();
 <template>
     <div id="app" v-if="user"> 
         <div  style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
+            <NuxtLoadingIndicator style="position: fixed; top: auto;" color="var(--highlight-color)" />
             <div id="left">
                 <MenuLeft />
             </div>
-
                 <NuxtPage />
                 <MenuMobile />
                 
@@ -27,6 +27,10 @@ const user = useSupabaseUser();
     </div>
 </template>
 <style lang="scss">
+    .nuxt-loading-indicator {
+        bottom: 0 !important;
+        filter: brightness(0.5);
+    }
     #app {
         position: absolute;
         width: 100%;

@@ -58,8 +58,8 @@ const handleLogin = async () => {
 
 const loginBg = ref('');
 onMounted(() => {
-const bgImages = ['https://i.ibb.co/6ZhLx5g/anime-anime-girls-hentai-ass-panties-1511555-wallhere-com.png', 'https://i.artfile.ru/4260x2400_1353123_%5Bwww.ArtFile.ru%5D.jpg', 'https://media1.tenor.com/m/QZG9CftjeQQAAAAC/abstract-pattern.gif' ];
-// const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.jpg', 'login-bg5.jpg', 'login-bg6.jpg', 'login-bg7.jpg', 'login-bg8.jpg', 'login-bg9.jpg', 'login-bg10.jpg', 'login-bg11.jpg'];
+//Never mind
+const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.jpg', 'login-bg5.jpg', 'login-bg6.jpg', 'login-bg7.jpg', 'login-bg8.jpg', 'login-bg9.jpg', 'login-bg10.jpg', 'login-bg11.jpg'];
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('${randomImage}')`;
 });
