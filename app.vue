@@ -6,15 +6,15 @@ const user = useSupabaseUser();
 </script>
 
 <template>
-    <div id="app" v-if="user"> 
-        <div  style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
+    <div id="app" v-if="user">
+        <div style="width: 100%; height: 100%; display: flex;align-items: flex-start;">
             <NuxtLoadingIndicator style="position: fixed; top: auto;" color="var(--highlight-color)" />
             <div id="left">
                 <MenuLeft />
             </div>
-                <NuxtPage />
-                <MenuMobile />
-                
+            <NuxtPage />
+            <MenuMobile />
+
             <div id="right">
                 <MenuRight />
             </div>

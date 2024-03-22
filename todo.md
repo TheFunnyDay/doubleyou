@@ -7,7 +7,8 @@
 - [ ] Display reply post (i guess thats need redesign)
 - [ ] More pics in post (?how)
 - [ ] YT video in post (works only with yt-video url)
-- [ ] **Add the functionality for users to follow other users, enabling them to view content shared by users they follow and to see which users follow them. (idk how, but ok 🗿)**
+- [ ] **Add followings**
+- [ ] Ability to delete a post by user
 - [x] Add a script to add users who liked the post to the database
 - [x] Add live likes update
 - [x] Complete about page

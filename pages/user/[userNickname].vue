@@ -6,7 +6,8 @@ const supabase = useSupabaseClient();
 const route = useRoute();
 const checkUser = useSupabaseUser();
 const authUserId = checkUser.value.id;
-
+const isFollowing = ref(false);
+const showButton = ref(false);
 useSeoMeta({
     title: '@' + route.params.userNickname + ' | W',
 });
@@ -28,7 +29,7 @@ const { data: user } = await supabase
     .eq('nickname', route.params.userNickname)
     .single();
 
-// const userPosts = user.value.id
+
 const { data: posts } = await supabase.from('posts')
     .select(`
         id,
@@ -49,14 +50,57 @@ const { data: posts } = await supabase.from('posts')
 
     .eq("author_id", user.id)
     .order('created_at', { ascending: false })
+
+const subscribe = async () => {
+    try {
+        const { data: existingFollowing } = await supabase
+            .from('profiles')
+            .select('following')
+            .eq('id', authUserId)
+            .single();
+
+        let updatedFollowings;
+
+        if (existingFollowing.following.includes(user.id)) {
+            // Remove authUserId from the array
+            updatedFollowings = existingFollowing.following.filter(
+                (id) => id !== user.id
+            );
+        } else {
+            // Add authUserId to the array
+            updatedFollowings = existingFollowing.following.concat(user.id);
+        }
+
+        console.log(updatedFollowings);
+
+        await supabase
+            .from('profiles')
+            .update({ following: updatedFollowings })
+            .eq('id', authUserId);
+        isFollowing.value = !isFollowing.value;
+    } catch (error) {
+        console.error('Error subscribing:', error);
+    }
+};
+onMounted(async () => {
+    const { data: existingFollowing } = await supabase
+        .from('profiles')
+        .select('following')
+        .eq('id', authUserId)
+        .single();
+
+    isFollowing.value = existingFollowing.following.includes(user.id);
+    showButton.value = true;
+
+});
 </script>
 
 <template>
     <div id="wall-content" >
         <Header :title="user.nickname ? user.nickname : 'Пользователь'" />
-        <Loading v-if="!user" />
+        <!-- <Loading v-if="!showButton" /> -->
 
-        <div id="user-info" style="color: white" v-else>
+        <div id="user-info" style="color: white">
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
                 <div id="userAvatar" :style="[
@@ -76,9 +120,17 @@ const { data: posts } = await supabase.from('posts')
                                 <span class="checkpremium"></span>
                             </span>
                             </span>
-                        <span id="user-nickname">@{{ user.nickname }}</span>
+                            <span id="user-nickname">@{{ user.nickname }}</span>
                         </div>
-                        <div id="user-follow" v-if="authUserId !== user.id">Подписаться</div>
+                        <div id="user-follow" 
+                            v-if="!showButton && authUserId !== user.id" 
+                            style="background-color: gray; width: 100px; text-align: center"
+                        >    
+                            ...
+                        </div>  
+                        <div id="user-follow"  @click="subscribe()" v-if="showButton && authUserId !== user.id">    
+                            {{ isFollowing ? 'Отписаться' : 'Подписаться' }}
+                        </div>                    
                     </div>
                     <span id="user-descript" v-text="user.descript"></span>
                 </div>
