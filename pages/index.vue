@@ -5,31 +5,52 @@ const post_text = ref('')
 const post_image = ref('')
 const userAvatar = user.value.user_metadata.avatar_url
 
+
+const preLoad = ref(true)
 useSeoMeta({
     title: 'Главная страница | W',
 });
-// import postData from "~/assets/posts.json";
-// console.log(user.value)
-const { data: posts } = await useAsyncData('posts', async () => {
-    const { data } = await supabase.from('posts')
-        .select(`
-            id,
-            created_at,
-            post_text,
-            post_image,
-            likes_count,
-            is_reply_to,
-            profiles (
-                nickname,
-                fullname,
-                avatar_url,
-                is_premium,
-                is_verification
-            )
-        `)
-        .order('created_at', { ascending: false });
+
+const feedType = ref('all'); 
+
+// Fetch user's following list
+let { data: profile } = await supabase
+    .from('profiles')
+    .select('following')
+    .eq('id', user.value.id)
+
+
+
+const { data: posts, refresh } = await useAsyncData('posts', async () => {
+    let query = supabase.from('posts').select(`
+        id, 
+        created_at,
+        post_text,
+        post_image,
+        likes_count,
+        is_reply_to,
+        profiles (
+            nickname,
+            fullname,
+            avatar_url,
+            is_premium,
+            is_verification
+        )
+    `).order('created_at', { ascending: false });
+
+    if (feedType.value === 'following' && profile) {
+        query = query.in('author_id', profile[0].following); 
+    }
+
+    const { data } = await query;
     return data;
 });
+
+const switchFeed = async (type) => {
+    feedType.value = type;
+    await refresh();
+    preLoad.value = false
+};
 
 const createPost = async () => {
     if (user === null) throw new Error('Пользователь не найдет');
@@ -132,7 +153,29 @@ const handleLike = async (post) => {
                 </div>
             </form>
         </div>
+        <div id="feed-type">
+            <button 
+                @click="switchFeed('all')"
+                :style="{ backgroundColor: feedType === 'all' ? 'var(--highlight-color)' : '', color: feedType === 'all' ? 'black' : '' }"
+                :disabled="feedType === 'all'"
+                >
+                    Все посты
+            </button>
+            <button 
+                @click="switchFeed('following')"
+                :style="{ backgroundColor: feedType === 'following' ? 'var(--highlight-color)' : '', color: feedType === 'following' ? 'black' : ''  }"
+                :disabled="feedType === 'following'"
+                >
+                    Подписки
+            </button>
+        </div>
         <Loading v-if="!posts" />
+        <div id="posts" 
+            v-else-if="posts && posts.length === 0"
+            style="display: flex; justify-content: center; align-items: center; flex-direction: column;height: 10vh;"
+        >
+            <h1>Тут ничего нет...</h1>
+        </div>
         <div id="posts" v-else>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
@@ -235,6 +278,7 @@ const handleLike = async (post) => {
                 resize: vertical;
             }
 
+
             #post-input-container {
                 display: flex;
                 justify-content: space-between;
@@ -281,11 +325,31 @@ const handleLike = async (post) => {
 
 
     }
-
+    #feed-type {
+        display: flex;
+        width: 100%;
+        outline: 1px solid var(--main-outline-color);
+        button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--main-color);
+            border: none;
+            padding: 25px;
+            font-size: large;
+            font-weight: 600;
+            cursor: pointer;
+            transition: .3s;
+            width: 100%;
+            color: var(--main-text-color);
+            &:hover {
+                background-color: var(--highlight-color-alpha);
+            }
+        }
+    }
     #posts {
         width: 100%;
         max-width: 646px;
     }
 }
 </style>
-

@@ -12,17 +12,24 @@ useSeoMeta({
     title: '@' + route.params.userNickname + ' | W',
 });
 
-const randImage = ref('');
+const randImageNoPosts = ref('');
 onMounted(() => {
-    const bgImages = [
+    const bgImagesNoPosts = [
         'https://media.tenor.com/ESNSzxKHiuEAAAAi/bird-seagull.gif', 
         'https://media.tenor.com/ociZpU8b_Q8AAAAi/cat-meme.gif',
         'https://media.tenor.com/k-9QNRTZhZsAAAAi/kzary.gif',
         'https://media.tenor.com/xGcV-91vbeIAAAAi/kita-ikuyo-kita.gif',
     ];
-    const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
-    randImage.value = randomImage;
+    const randomImage = bgImagesNoPosts[Math.floor(Math.random() * bgImagesNoPosts.length)];
+    randImageNoPosts.value = randomImage;
 });
+
+const loading = ref(false);
+
+setTimeout(() => {
+    loading.value = true;
+}, 1500);
+
 const { data: user } = await supabase
     .from('profiles')
     .select('*')
@@ -62,12 +69,10 @@ const subscribe = async () => {
         let updatedFollowings;
 
         if (existingFollowing.following.includes(user.id)) {
-            // Remove authUserId from the array
             updatedFollowings = existingFollowing.following.filter(
                 (id) => id !== user.id
             );
         } else {
-            // Add authUserId to the array
             updatedFollowings = existingFollowing.following.concat(user.id);
         }
 
@@ -96,11 +101,12 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div id="wall-content" >
+    <div v-if="!loading" style="max-width: 646px; width: 100%;">
+        <Loading />
+    </div>
+    <div id="wall-content" v-else>
         <Header :title="user.nickname ? user.nickname : 'Пользователь'" />
-        <!-- <Loading v-if="!showButton" /> -->
-
-        <div id="user-info" style="color: white">
+        <div id="user-info" style="color: white" >
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
                 <div id="userAvatar" :style="[
@@ -150,7 +156,7 @@ onMounted(async () => {
             </div>
             <div id="user-no-posts" v-if="!posts.length">
                 У пользователя {{ user.fullname }}  нет никаких публикаций
-                <img :src="randImage" />
+                <img :src="randImageNoPosts" />
             </div>
             <div class="post" v-for="post in posts" :key="post.id">
                 <div class="user-info-container">
