@@ -8,6 +8,7 @@ const avatar_url = ref('https://i.pinimg.com/236x/10/c5/43/10c543516e4c1a6528c90
 const fullname = ref('')
 const nickname = ref('')
 const cover_url = ref('https://i.ibb.co/Z27gLm5/hbc-Fz-Xk-F6-HJ2-model-Name-model-Version-dreamlike-art.png')
+const suggestedNicknames = ref([]);
 
 useSeoMeta({
     title: 'Авторизация | W',
@@ -63,6 +64,35 @@ const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.j
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('${randomImage}')`;
 });
+
+const generateNicknames = () => {
+    const emailParts = email.value.split('@')[0].split('.');
+    const suggestions = [];
+
+    if (emailParts.length >= 2) {
+        suggestions.push(emailParts[0] + emailParts[1][0]);
+    }
+
+    if (emailParts.length >= 2) {
+        suggestions.push(emailParts[0].slice(0, 2) + emailParts[1].slice(0, 2));
+    }
+
+    suggestions.push(emailParts[0] + Math.floor(Math.random() * 1000));
+
+    suggestedNicknames.value = suggestions;
+};
+
+watch(email, (newEmail) => {
+    if (newEmail.includes('@')) {
+        generateNicknames();
+    } else {
+        suggestedNicknames.value = [];
+    }
+});
+
+const selectNickname = (selectedNickname) => {
+    nickname.value = selectedNickname;
+};
 </script>
 
 <template>
@@ -71,7 +101,7 @@ const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.j
             <div id="logo-hang">
                 <img src="/doubleyou-logo-white.png" />
             </div>
-            <div id="authForm" >
+            <div id="authForm">
                 <img src="/doubleyou-logo-white.png" />
                 <div v-if="isSignUp === true">
                     <form @submit.prevent="handleSingUp">
@@ -81,27 +111,39 @@ const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.j
                                 <input class="inputField" type="email" placeholder="Почта" v-model="email" />
                                 <input class="inputField" type="password" placeholder="Пароль" v-model="password" />
                                 <div>
-                                    <input class="inputField" type="text" placeholder="ФИО" v-model="fullname" />
-                                    <input class="inputField" type="text" placeholder="Никнейм" v-model="nickname" />                                    
+                                    <input class="inputField" type="text" placeholder="Имя" v-model="fullname" />
+                                    <input class="inputField" type="text" placeholder="Никнейм" v-model="nickname" />
+                                    <div>
+                                        <ul class="suggestedNicknames">
+                                            <li v-for="suggestedNickname in suggestedNicknames" :key="suggestedNickname"
+                                                @click="selectNickname(suggestedNickname)">
+                                                {{ suggestedNickname }}
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                             <div>
-                                <input type="submit" :value="loading ? 'Загрузка' : 'Зарегистрироваться'" :disabled="loading" />
+                                <input type="submit" :value="loading ? 'Загрузка' : 'Зарегистрироваться'"
+                                    :disabled="loading" />
                             </div>
                             <p class="isSingUp" @click="isSignUp = !isSignUp">Уже зарегистрированы? Войти</p>
                         </div>
                     </form>
                 </div>
                 <div v-if="isSignUp === false">
-                    <form  @submit.prevent="handleLogin">
-                        <div >
+                    <form @submit.prevent="handleLogin">
+                        <div>
                             <h1 style="color: white">С возвращением!</h1>
                             <div>
-                                <input class="inputField" type="email" placeholder="Ваша почта" v-model="email" style="backdrop-filter: blur(0) !important;"/>
-                                <input class="inputField" type="password" placeholder="Ваш пароль" v-model="password" style="backdrop-filter: blur(0) !important;"/>
+                                <input class="inputField" type="email" placeholder="Ваша почта" v-model="email"
+                                    style="backdrop-filter: blur(0) !important;" />
+                                <input class="inputField" type="password" placeholder="Ваш пароль" v-model="password"
+                                    style="backdrop-filter: blur(0) !important;" />
                             </div>
                             <div>
-                                <input type="submit" :value="loading ? 'Загрузка' : 'Войти'" :disabled="loading" style="backdrop-filter: blur(0) !important;"/>
+                                <input type="submit" :value="loading ? 'Загрузка' : 'Войти'" :disabled="loading"
+                                    style="backdrop-filter: blur(0) !important;" />
                             </div>
                             <p class="isSingUp" @click="isSignUp = !isSignUp">Еще не зарегистрированы?</p>
                         </div>
@@ -209,6 +251,31 @@ const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.j
                 &:hover {
                     color: #000000;
                     background-color: var(--highlight-color);
+                }
+            }
+            .suggestedNicknames {
+                display: flex;
+                width: 100%;
+                height: 47px;
+                li {
+                    cursor: pointer;
+                    margin-top: 10px;
+                    color: var(--highlight-color);
+                    background-color: var(--main-color-alpha);
+                    padding: 10px;
+                    border-radius: 10px;
+                    transition: .3s color, .3s background-color;
+                    text-decoration: none;
+                    list-style: none;
+                    user-select: none;
+                    outline: 1px solid var(--main-outline-color);
+                    &:hover {
+                        color: #000000;
+                        background-color: var(--highlight-color);
+                    }
+                    &:not(:first-child) {
+                        margin-left: 10px;
+                    }
                 }
             }
             .isSingUp {

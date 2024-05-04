@@ -18,7 +18,7 @@ let { data: profile } = await supabase
     .from('profiles')
     .select('following')
     .eq('id', user.value.id)
-
+    .single()
 
 
 const { data: posts, refresh } = await useAsyncData('posts', async () => {
@@ -36,10 +36,11 @@ const { data: posts, refresh } = await useAsyncData('posts', async () => {
             is_premium,
             is_verification
         )
-    `).order('created_at', { ascending: false });
+    `)
+    .order('created_at', { ascending: false });
 
     if (feedType.value === 'following' && profile) {
-        query = query.in('author_id', profile[0].following); 
+        query = query.in('author_id', profile.following); 
     }
 
     const { data } = await query;
@@ -335,7 +336,7 @@ const handleLike = async (post) => {
             justify-content: center;
             background-color: var(--main-color);
             border: none;
-            padding: 25px;
+            padding: 16px;
             font-size: large;
             font-weight: 600;
             cursor: pointer;
