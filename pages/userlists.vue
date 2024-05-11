@@ -81,7 +81,8 @@
         padding: 25px;
         font-size: 18px;
         transition: .3s;
-        border-radius: 0;
+        border-radius: 25px;
+        margin-top: 20px;
         &:focus {
             color: #000000;
             background-color: var(--highlight-color);
@@ -93,9 +94,12 @@
         width: 100%;
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
-        border-bottom: 1px solid var(--main-outline-color);
-        border-top: 1px solid var(--main-outline-color);
         flex-direction: column;
+        border-radius: 25px;
+        margin-top: 20px;
+        &:last-child {
+            margin-bottom: 20px;
+        }
         a {
             text-decoration: none;
         }

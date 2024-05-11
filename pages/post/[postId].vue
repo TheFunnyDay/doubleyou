@@ -284,17 +284,19 @@ const createReply = async () => {
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .user-post {
     .post {
         cursor: default;
         margin-top: 0;
         max-width: 646px;
-
+        margin-top: 20px;
         &:hover {
             background-color: var(--main-color);
         }
-
+        &:last-child {
+            margin-bottom: 20px;
+        }
         .post-text {
             cursor: text;
         }
@@ -303,7 +305,8 @@ const createReply = async () => {
 
 #comments-con {
     display: flex;
-
+    margin-top: 20px;
+    border-radius: 25px;
     #cooments-con-user-avatar {
         flex: 0 0 40px;
         width: 40px;

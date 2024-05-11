@@ -2,8 +2,8 @@
 const user = useSupabaseUser();
 const supabase = useSupabaseClient();
 const amoledTheme = ` --main-bg-color: #000000; --main-text-color: #ffffff; --sub-text-color: #ABABAB; --sub-text-color-hover: #000000; --main-color: #000000; --main-color-alpha: rgba(29, 29, 29, 0.8); --sub-color-alpha: rgba(0, 0, 0, 0.8); --sub-color: #0f0f0f; --main-outline-color: #2f3633; --main-border-color: #3f3f3f; --highlight-color: #00dc82; --highlight-color-alpha: #1a2923; --highlight-color-sub: #7a7a7a; --invert: 0;`;
-const whiteTheme = `--main-bg-color: #ffffff; --main-text-color: #000000; --sub-text-color: #696969; --sub-text-color-hover: #898989; --main-color: #ffffff; --main-color-alpha: rgb(189 189 189 / 80%); --sub-color-alpha: rgb(255 255 255 / 80%); --sub-color: #e3e3e3; --main-outline-color: #bfbfbf; --main-border-color: #bfbfbf; --highlight-color: #00dc82; --highlight-color-alpha: #b4ffe1; --highlight-color-sub: #7a7a7a; --invert: 1;`
-const darkTheme = `--main-bg-color: #212121; --main-text-color: #ffffff; --sub-text-color: #9f9f9f; --sub-text-color-hover: #898989; --main-color: #212121; --main-color-alpha: rgb(57 57 57 / 80%); --sub-color-alpha: rgb(30 30 30 / 80%); --sub-color: #272727; --main-outline-color: #3b3b3b; --main-border-color: #3b3b3b; --highlight-color: #00dc82; --highlight-color-alpha: #2c3531; --highlight-color-sub: #7a7a7a; --invert: 0;`
+const whiteTheme = `--main-bg-color: #f7f9ff;--main-text-color: #181c20;--sub-text-color: #42474e;--sub-text-color-hover: #000000;--main-color: #fefeff;--main-color-alpha: rgba(210, 212, 216, 0.8);--sub-color-alpha: rgba(255, 255, 255, 0.8);--sub-color: #f1f1f1;--main-outline-color: #c2c7cf;--main-border-color: #c2c7cf;--highlight-color: #22c277;--highlight-color-alpha: #c3ebd7;--highlight-color-sub: #7a7a7a;--invert: 1;`
+const darkTheme = `--main-bg-color: #101418; --main-text-color: #e0e2e8; --sub-text-color: #C5C8BA; --sub-text-color-hover: #000000; --main-color: #1d2024; --main-color-alpha: rgba(29, 32, 36, 0.8) ; --sub-color-alpha: rgba(29, 32, 36, 0.8); --sub-color: #272b30; --main-outline-color: #42474e; --main-border-color: #42474e; --highlight-color: #53ff78; --highlight-color-alpha: #2d3d34; --highlight-color-sub: #7a7a7a; --invert: 0;`
 
 useSeoMeta({
     title: 'Настройки профиля | W',
@@ -105,6 +105,8 @@ const handleUserMetaUpdate = async () => {
 
 <style lang="scss">
     .content {
+        margin-top: 20px;
+        border-radius: 25px;
         h1 {
             margin-bottom: 20px;
         }
@@ -161,6 +163,7 @@ const handleUserMetaUpdate = async () => {
             justify-content: space-between;
             align-items: center;
             .button {
+                border-radius: 25px;
                 &:not(:first-child) {
                     margin-left: 10px;
                 }

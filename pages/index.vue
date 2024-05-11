@@ -157,14 +157,14 @@ const handleLike = async (post) => {
         <div id="feed-type">
             <button 
                 @click="switchFeed('all')"
-                :style="{ backgroundColor: feedType === 'all' ? 'var(--highlight-color)' : '', color: feedType === 'all' ? 'black' : '' }"
+                :style="{ backgroundColor: feedType === 'all' ? 'var(--highlight-color)' : '', color: feedType === 'all' ? 'var(--sub-text-color-hover)' : '' }"
                 :disabled="feedType === 'all'"
                 >
                     Все посты
             </button>
             <button 
                 @click="switchFeed('following')"
-                :style="{ backgroundColor: feedType === 'following' ? 'var(--highlight-color)' : '', color: feedType === 'following' ? 'black' : ''  }"
+                :style="{ backgroundColor: feedType === 'following' ? 'var(--highlight-color)' : '', color: feedType === 'following' ? 'var(--sub-text-color-hover)' : ''  }"
                 :disabled="feedType === 'following'"
                 >
                     Подписки
@@ -255,8 +255,9 @@ const handleLike = async (post) => {
         max-width: 646px;
         background-color: var(--main-color);
         outline: 1px solid var(--main-outline-color);
-        padding: 18px;
-
+        padding: 25px;
+        margin-top: 20px;
+        border-radius: 25px;
         form {
             width: 100%;
             display: flex;
@@ -330,6 +331,10 @@ const handleLike = async (post) => {
         display: flex;
         width: 100%;
         outline: 1px solid var(--main-outline-color);
+        border-radius: 25px;
+        overflow: hidden;
+        margin-top: 20px;
+        margin-bottom: 20px;
         button {
             display: flex;
             align-items: center;

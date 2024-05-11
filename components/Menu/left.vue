@@ -13,7 +13,7 @@ const logout = async () => {
         return;
     }
     localStorage.setItem('userTheme', null);
-    document.querySelector("html").style.cssText = '--main-bg-color: #000000; --main-text-color: #ffffff; --sub-text-color: #ABABAB; --sub-text-color-hover: #000000; --main-color: #000000; --main-color-alpha: rgba(29, 29, 29, 0.8); --sub-color-alpha: rgba(0, 0, 0, 0.8); --sub-color: #0f0f0f; --main-outline-color: #2f3633; --main-border-color: #3f3f3f; --highlight-color: #00dc82; --highlight-color-alpha: #1a2923; --highlight-color-sub: #7a7a7a; --invert: 0;';
+    document.querySelector("html").style.cssText = '--main-bg-color: #12140E; --main-text-color: #E2E3D8; --sub-text-color: #C5C8BA; --sub-text-color-hover: #000000; --main-color: #1E201A; --main-color-alpha: rgba(29, 29, 29, 0.8) ; --sub-color-alpha: rgba(30, 32, 26, 0.8); --sub-color: #1A1C16; --main-outline-color: #44483D; --main-border-color: #44483D; --highlight-color: #B1D18A; --highlight-color-alpha: #1a2923; --highlight-color-sub: #7a7a7a; --invert: 0;';
 
     await navigateTo('/login');
 };
@@ -52,6 +52,10 @@ const logout = async () => {
             background-position: center;
             background-size: cover;
             background-repeat: no-repeat;
+            margin-left: 10px;
+            @media (max-width: 1080px) {
+                margin-left: 5px;
+            }
         }
         #leftBarMenu {
             display: flex;
@@ -66,17 +70,15 @@ const logout = async () => {
                 color: white;
                 width: 100%;
                 float: left;
-                padding: 10px;
+                padding-block: 10px;
+                padding-inline: 15px;
                 margin-top: 10px;
                 align-items: center;
                 justify-content: flex-start;
                 flex-direction: row;
-                border-radius: 15px;
+                border-radius: 25px;
+                transition: .1s background-color, .1s color;
                 &:hover {
-                    background-color: var(--main-color-alpha);
-                    outline: 1px solid var(--main-outline-color);
-                }
-                &:active {
                     background-color: var(--highlight-color);
                     .leftNav-text {
                         color: var(--sub-text-color-hover);
@@ -84,6 +86,9 @@ const logout = async () => {
                     img {
                         filter: invert(1);
                     }
+                }
+                &:active {
+                    outline: 1px solid var(--main-outline-color);
                 }
                 img {
                     filter: invert(var(--invert));

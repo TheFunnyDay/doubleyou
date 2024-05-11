@@ -228,7 +228,8 @@ onMounted(async () => {
     align-items: stretch;
     background-color: var(--main-color);
     outline: 1px solid var(--main-outline-color);
-
+    border-radius: 25px;
+    margin-top: 25px;
     #user-cover {
         width: 100%;
         height: 200px;
@@ -281,22 +282,23 @@ onMounted(async () => {
 
                 #user-nickname {
                     font-size: 18px;
-                    color: #ABABAB;
+                    color: var(--sub-text-color);
                 }
                 #user-follow {
                     font-size: 16px;
                     color: var(--main-text-color);
                     font-weight: 700;
                     background-color: var(--highlight-color);
-                    padding: 7px;
-                    border-radius: 10px;
+                    padding-block: 7px;
+                    padding-inline: 10px;
+                    border-radius: 25px;
                     cursor: pointer;
                     transition: .2s;
                     color: black;
                     outline: 1px solid var(--main-outline-color);
                     &:hover {
                         color: var(--main-text-color);
-                        background-color: var(--highlight-color-alpha);
+                        background-color: var(--main-color);
                     }
                     &:active {
                         background-color: var(--highlight-color-sub);                    
@@ -338,7 +340,8 @@ onMounted(async () => {
         flex-direction: row;
         justify-content: space-around;
         overflow: hidden;
-
+        border-radius: 25px;
+        margin-top: 20px;
         .user-switch-to {
             display: flex;
             padding: 15px;
@@ -356,7 +359,7 @@ onMounted(async () => {
                 background-color: var(--highlight-color);
 
                 span {
-                    color: black;
+                    color: var(--sub-text-color-hover);
                 }
             }
         }

@@ -40,6 +40,7 @@ const toggleMobileMenu = () => {
     backdrop-filter: blur(25px);
     outline: 1px solid var(--main-outline-color);
     padding: 14px 20px 15px 20px;
+    border-radius:  0 0 25px 25px; 
     #mobile-menu-icon {
         filter: invert(var(--invert));
         cursor: pointer;

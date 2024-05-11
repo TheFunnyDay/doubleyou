@@ -1,6 +1,7 @@
 <script setup>
 const supabase = useSupabaseClient()
-const isSignUp = ref(true)
+const isSignUp = ref(true);
+const isForgotPassword = ref(false);
 const loading = ref(false);
 const email = ref('');
 const password = ref('');
@@ -9,7 +10,7 @@ const fullname = ref('')
 const nickname = ref('')
 const cover_url = ref('https://i.ibb.co/Z27gLm5/hbc-Fz-Xk-F6-HJ2-model-Name-model-Version-dreamlike-art.png')
 const suggestedNicknames = ref([]);
-
+const togglePopup = ref(false);
 useSeoMeta({
     title: 'Авторизация | W',
 });
@@ -39,6 +40,7 @@ const handleSingUp = async () => {
         loading.value = false
     }
 }
+// console.log(window.location.hostname)
 const handleLogin = async () => {
     try {
         loading.value = true
@@ -48,15 +50,35 @@ const handleLogin = async () => {
                 password: password.value,
             }
         )
-            
         if (error) throw error
     } catch (error) {
         alert(error.error_description || error.message)
     } finally {
-        loading.value = false
+        loading.value = false;
     }
 }
 
+const handleForgotPassword = async () => {
+    try {
+        loading.value = true
+        const { error } = await supabase.auth.signInWithOtp({
+            email: email.value,
+            options: {
+                shouldCreateUser: false,
+                emailRedirectTo: `http://${window.location.hostname}:3000/settings`,
+            },
+        })
+        togglePopup.value = !togglePopup.value
+        if (error) throw error
+    } catch (error) {
+        alert(error.error_description || error.message)
+    } finally {
+        loading.value = false;
+        setTimeout(() => {
+            togglePopup.value = !togglePopup.value
+        }, 5000)
+    }
+}
 const loginBg = ref('');
 onMounted(() => {
 //Never mind
@@ -103,7 +125,7 @@ const selectNickname = (selectedNickname) => {
             </div>
             <div id="authForm">
                 <img src="/doubleyou-logo-white.png" />
-                <div v-if="isSignUp === true">
+                <div v-if="isSignUp === true && !isForgotPassword">
                     <form @submit.prevent="handleSingUp">
                         <div>
                             <h1 style="color: white" class="header">Добро пожаловать в Дабл Ю!</h1>
@@ -131,7 +153,7 @@ const selectNickname = (selectedNickname) => {
                         </div>
                     </form>
                 </div>
-                <div v-if="isSignUp === false">
+                <div v-if="isSignUp === false && !isForgotPassword">
                     <form @submit.prevent="handleLogin">
                         <div>
                             <h1 style="color: white">С возвращением!</h1>
@@ -146,9 +168,29 @@ const selectNickname = (selectedNickname) => {
                                     style="backdrop-filter: blur(0) !important;" />
                             </div>
                             <p class="isSingUp" @click="isSignUp = !isSignUp">Еще не зарегистрированы?</p>
+                            <p class="isSingUp" @click="isForgotPassword = !isForgotPassword">Забыли пароль?</p>
                         </div>
                     </form>
                 </div>
+                <div v-if="isForgotPassword">
+                    <form @submit.prevent="handleForgotPassword">
+                        <div>
+                            <h1 style="color: white">Восстановление пароля</h1>
+                            <p style="color: white; margin-top: 10px">После ввода почты Вы получите ссылку для мгновенного входа в аккаунт</p>
+                            <div>
+                                <input class="inputField" type="email" placeholder="Ваша почта" v-model="email"
+                                    style="backdrop-filter: blur(0) !important;" />
+                            </div>
+                            <div>
+                                <input type="submit" :value="loading ? 'Отправка' : 'Отправить'" :disabled="loading"
+                                    style="backdrop-filter: blur(0) !important;" />
+                            </div>
+                            <p class="isSingUp" @click="isForgotPassword = !isForgotPassword; isSignUp = !isSignUp">Назад</p>
+                        </div>
+                    </form>
+                    <ModalPopup v-if="togglePopup">Ссылка для мгновенного входа отправлена</ModalPopup>
+                </div>
+                            
             </div>
         </div>
     </div>
