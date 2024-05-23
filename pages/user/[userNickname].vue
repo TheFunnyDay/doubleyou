@@ -36,7 +36,7 @@ const { data: user } = await supabase
     .eq('nickname', route.params.userNickname)
     .single();
 
-
+// console.log('user', user)
 const { data: posts } = await supabase.from('posts')
     .select(`
         id,
@@ -206,11 +206,11 @@ onMounted(async () => {
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button"></div>
+                        <span class="material-symbols-rounded likes-button" @click="postLike(post.id); handleLike(post)"> favorite </span>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
-                        <div class="comments-button"></div>
+                        <span class="material-symbols-rounded comments-button"> comment </span>
                         <div class="comments-count"></div>
                     </div>
                 </div>
@@ -370,7 +370,6 @@ onMounted(async () => {
         width: 100%;
         justify-content: center;
         align-items: center;
-        outline: 1px solid var(--main-outline-color);
         padding: 20px;
         font-size: 18px;
         font-weight: 700;

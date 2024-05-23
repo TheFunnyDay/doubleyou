@@ -229,11 +229,11 @@ const handleLike = async (post) => {
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <div class="likes-button" @click="postLike(post.id); handleLike(post)"></div>
+                        <span class="material-symbols-rounded likes-button" @click="postLike(post.id); handleLike(post)"> favorite </span>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
-                        <div class="comments-button"></div>
+                        <span class="material-symbols-rounded comments-button"> comment </span>
                         <div class="comments-count"></div>
                     </div>
                 </div>

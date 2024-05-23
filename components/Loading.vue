@@ -13,7 +13,6 @@
     align-items: center;
     width: 100%;
     height: 50vh;
-    outline: 1px solid var(--main-outline-color);
     .spinner {
         width: 56px;
         height: 56px;

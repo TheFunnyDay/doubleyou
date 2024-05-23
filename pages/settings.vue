@@ -104,7 +104,7 @@ const handleUserMetaUpdate = async () => {
 </template>
 
 <style lang="scss">
-    .content {
+.content {
         margin-top: 20px;
         border-radius: 25px;
         h1 {

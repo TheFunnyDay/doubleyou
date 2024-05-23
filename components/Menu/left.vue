@@ -23,13 +23,13 @@ const logout = async () => {
     <div id="leftBar">
         <div id="logo" @click="$router.push('/')"></div>
         <div id="leftBarMenu">
-            <NuxtLink to="/" class="leftNav"><img src="/icons/home.png" alt=""><span class="leftNav-text">Главная</span></NuxtLink>
-            <NuxtLink to="/userlists" class="leftNav"><img src="/icons/people.png" alt=""><span class="leftNav-text">Пользователи</span></NuxtLink>
-            <NuxtLink to="/settings" class="leftNav"><img src="/icons/settings.png" alt=""><span class="leftNav-text">Настройки</span></NuxtLink>
+            <NuxtLink to="/" class="leftNav"><span class="material-symbols-rounded"> holiday_village </span><span class="leftNav-text">Главная</span></NuxtLink>
+            <NuxtLink to="/userlists" class="leftNav"><span class="material-symbols-rounded"> group </span><span class="leftNav-text">Пользователи</span></NuxtLink>
+            <NuxtLink to="/settings" class="leftNav"><span class="material-symbols-rounded"> settings </span><span class="leftNav-text">Настройки</span></NuxtLink>
             <NuxtLink to="/premium" class="leftNav"><img src="/doubleyou-logo-white.png" alt=""><span class="leftNav-text">Премиум</span></NuxtLink>
-            <NuxtLink to="/about" class="leftNav"><img src="/icons/info.png" alt=""><span class="leftNav-text">О проекте</span></NuxtLink>
+            <NuxtLink to="/about" class="leftNav"><span class="material-symbols-rounded"> info </span><span class="leftNav-text">О проекте</span></NuxtLink>
             <NuxtLink v-if="user" :to="'/user/' + userNickname" class="leftNav"><span class="avatar" :style="'background-image: url(' + (userAvatar || null) + ')'" alt=""></span><span class="leftNav-text">Профиль</span></NuxtLink>
-            <p @click="logout" id="logout" class="leftNav"><img src="/icons/exit.png" alt=""><span class="leftNav-text">Выйти</span></p>
+            <p @click="logout" id="logout" class="leftNav"><span class="material-symbols-rounded"> logout </span><span class="leftNav-text">Выйти</span></p>
         </div>
     </div>
 </template>
@@ -40,7 +40,7 @@ const logout = async () => {
         margin-right: 10px;
         margin-left: 10px;
         margin-top: 15px;
-        max-width: 200px;
+        max-width: 205px;
         height: 100%;
         #logo  {
             filter: invert(var(--invert));
@@ -86,21 +86,33 @@ const logout = async () => {
                     img {
                         filter: invert(1);
                     }
+                    .material-symbols-rounded {
+                        color: var(--sub-text-color-hover);
+                    }
                 }
                 &:active {
                     outline: 1px solid var(--main-outline-color);
                 }
                 img {
                     filter: invert(var(--invert));
-                    width: 24px;
+                    width: 30px;
+                    margin-right: 10px;
+                    @media (max-width: 1080px) {
+                        margin-right: 0;
+                    }
+                }
+                .material-symbols-rounded {
+                    font-size: 30px;
+                    width: 30px;
+                    height: 30px;
                     margin-right: 10px;
                     @media (max-width: 1080px) {
                         margin-right: 0;
                     }
                 }
                 .avatar {
-                    width: 26px;
-                    height: 26px;
+                    width: 30px;
+                    height: 30px;
                     margin-right: 10px;
                     border-radius: 100%;
                     background-size: cover;
