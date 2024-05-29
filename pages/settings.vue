@@ -8,7 +8,7 @@ const darkTheme = `--main-bg-color: #101418; --main-text-color: #e0e2e8; --sub-t
 useSeoMeta({
     title: 'Настройки профиля | W',
 });
- 
+
 const togglePopup = ref(false);
 const disabledSave = ref(false);
 //Применить тему
@@ -33,7 +33,8 @@ const userNickname = ref(user.value.user_metadata.nickname);
 const userFullname  = ref(user.value.user_metadata.fullname);
 const userAvatar = ref(user.value.user_metadata.avatar_url);
 const userCover = ref(user.value.user_metadata.cover_url || null);
-
+const userEmail = ref(user.value.email);
+const userPassword = ref(null);
 const handleUserMetaUpdate = async () => {
     try {
             const { data, error } = await supabase.auth.updateUser({
@@ -59,7 +60,29 @@ const handleUserMetaUpdate = async () => {
     }
 }
 
+const updateUserEmail = async () => {
+    try {
+        const { data, error } = await supabase.auth.updateUser({
+            email: userEmail.value
+        })
+        if (error) throw error
+    } catch (error) {
+        alert(error.error_description || error.message)
+    }
+}
 
+const updateUserPassword = async () => {
+    try {
+        const { data, error } = await supabase.auth.updateUser({
+            password: userPassword.value
+        })
+        if (error) throw error
+    } catch (error) {
+        if (error.status === 422) {
+            alert("Этот пароль уже использовался, попробуйте другой")
+        }
+    }
+}
 </script>
 
 <template>
@@ -80,8 +103,8 @@ const handleUserMetaUpdate = async () => {
                         <input type="text" name="" v-model="userFullname" class="main-input" />
                         <p class="main-margin">Никнейм</p>
                         <input type="text" name="" v-model="userNickname" class="main-input" />
-                        <p class="main-margin">Почта</p>
-                        <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/>
+                        <!-- <p class="main-margin">Почта</p>
+                        <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/> -->
                         <p class="main-margin">Аватарка</p>
                         <input type="text" name="" v-model="userAvatar" class="main-input" />
                         <p class="main-margin">Обложка</p>
@@ -93,6 +116,23 @@ const handleUserMetaUpdate = async () => {
             </div>
         </div>
         <div class="content">
+            <h1>Настройка аккаунта</h1>
+            <form @submit.prevent="updateUserEmail">
+                <p>Почта</p>
+                <div class="splittedForm">
+                    <input type="email" name="" id="" class="main-input" v-model="userEmail"/>
+                    <input type="submit" value="Изменить" class="button">
+                </div>
+            </form>
+            <form @submit.prevent="updateUserPassword">
+                <p>Пароль</p>
+                <div class="splittedForm">
+                    <input type="password" name="" id="" class="main-input" v-model="userPassword"/>
+                    <input type="submit" value="Изменить" class="button">
+                </div>
+            </form>
+        </div>
+        <div class="content">
             <h1>Настройка цветовой схемы</h1>
             <div class="color-setup">
                 <div class="button" style="background-color: #000; color: white" @click="setTheme(amoledTheme)">Амолед</div>
@@ -100,6 +140,20 @@ const handleUserMetaUpdate = async () => {
                 <div class="button" style="background-color: #fff; color: black" @click="setTheme(whiteTheme)">Светлая</div>
             </div>
         </div>
+        <DevOnly>
+            <div class="content">
+                <h1>Dev</h1>
+                user id: {{ user.id }} <br>
+                user email: {{ user.email }} <br>
+                user nickname: {{ user.user_metadata.nickname }} <br>
+                user fullname: {{ user.user_metadata.fullname }} <br>
+                user avatar: <a style="color: var(--highlight-color)" :href="user.user_metadata.avatar_url" target="_blank"> {{ user.user_metadata.avatar_url }}</a> <br>
+                user cover:  <a style="color: var(--highlight-color)" :href="user.user_metadata.cover_url" target="_blank"> {{ user.user_metadata.cover_url }}</a> <br>
+                user created at: {{ user.created_at.substring(0, 10) }} <br>
+                user updated at: {{ user.updated_at.substring(0, 10) }} <br>
+                user last sign in: {{ user.last_sign_in_at.substring(0, 10) }} <br>
+            </div>
+        </DevOnly>
     </div>    
 </template>
 

@@ -7,7 +7,7 @@ const userAvatar = user.value.user_metadata.avatar_url || 1;
 const post_text = ref(null)
 const viewImageToggle = ref(false);
 const togglePopup = ref(false);
-
+const postLikesCount = ref(0);
 
 const ToggleView = () => {
     viewImageToggle.value = !viewImageToggle.value
@@ -16,9 +16,9 @@ useSeoMeta({
     title: 'Пост | W',
 });
 
-const { data: posts } = await useAsyncData('posts', async () => {
-    let query =  supabase.from('posts')
-        .select(`
+const {data: posts, error} = await supabase
+    .from('posts')
+    .select(`
             id,
             created_at,
             post_text,
@@ -36,11 +36,20 @@ const { data: posts } = await useAsyncData('posts', async () => {
         `)
         .limit(1)
         .eq("id", router.params.postId);
+        if (posts.length !== 0) {
+            postLikesCount.value = posts[0].likes_count
+        }
 
-    const { data } = await query;
-    return data;
-});
 
+if (posts === null) {
+    alert("Пост не существует.\nОшибка получения поста с сервера. Вы будуте перенаправлены на главную страницу");
+    navigateTo('/');
+}
+
+console.log('posts', posts)
+if (posts.length === 0) {
+    console.log('Posts not found');
+}
 const { data: replies } = await useAsyncData('replies', async () => {
     const { data } = await supabase.from('posts')
         .select(`
@@ -80,8 +89,10 @@ const postLike = async (id) => {
 
     if (userIndex === -1) {
         usersWhoLiked.push(user.value.id);
+        postLikesCount.value = postData.likes_count + 1;
     } else {
         usersWhoLiked.splice(userIndex, 1);
+        postLikesCount.value = postData.likes_count - 1;
     }
 
     const updatedLikesCount = usersWhoLiked.length;
@@ -122,7 +133,7 @@ const deletePost = async () => {
 }
 
 const createReply = async () => {
-    if (!user) throw new Error('Пользователь не найдет');
+    if (!user) throw new Error('Пользователь не найден');
     if (post_text.value === null) {
         alert("Пост не может быть пустым")
         return false;
@@ -132,7 +143,7 @@ const createReply = async () => {
         .insert({
             author_id: user.value.id,
             post_text: post_text.value,
-            is_reply_to: posts.value[0].id
+            is_reply_to: posts[0].id
         })
         .select()
         .single();
@@ -177,6 +188,14 @@ const createReply = async () => {
             :postText="posts[0].post_text" />
         <Header title="Пост" />
         <Loading v-if="!posts" />
+        <div v-if="posts.length === 0" class="post-not-found">
+            <h1>Публикация недоступна</h1>
+            <p>Публикация была удалена или не существует</p>
+        </div>
+        <div v-if="posts === null" class="post-not-found">
+            <h1>Ошибка получения публикации с сервера</h1>
+            <p>Вы будете перенаправлены на главную страницу</p>
+        </div>
         <div class="post" v-for="post in posts" :key="post.id" v-else>
             <div class="user-info-container">
                 <div class="user-main-info">
@@ -226,7 +245,7 @@ const createReply = async () => {
                 <div class="post-likes">
                     <span class="material-symbols-rounded likes-button" @click="postLike(post.id); handleLike(post)">
                         favorite </span>
-                    <div class="likes-count" v-text="post.likes_count"></div>
+                    <div class="likes-count" v-text="postLikesCount"></div>
                 </div>
                 <div class="post-remove" v-if="post.author_id === user.id">
                     <span class="material-symbols-rounded" @click="deletePost()"> delete </span>
@@ -237,8 +256,18 @@ const createReply = async () => {
         <div id="comments-con" class="content" style="text-align: center;">
             <div id="cooments-con-user-avatar" :style="{ backgroundImage: 'url(' + userAvatar + ')' }"></div>
             <form @submit.prevent="createReply">
-                <input type="text" maxlength="263" placeholder="Ответить..." v-model="post_text">
+                <input type="text" maxlength="263" :placeholder="posts.length === 0 ? 'Комментирование недоступно' : 'Написать комментарий'" v-model="post_text" :disabled="posts.length === 0">
+                    <span 
+                        v-if="posts.length !== 0"
+                        class="material-symbols-rounded" 
+                        @click="createReply" 
+                        style="
+                            font-size: 28px;
+                            cursor: pointer;
+                        "
+                    >send</span>
             </form>
+            
         </div>
         <Loading v-if="!replies" />
         <div class="post" v-if="replies" v-for="reply in replies" :key="reply.id">
@@ -296,6 +325,28 @@ const createReply = async () => {
 </template>
 
 <style lang="scss" scoped>
+
+.post-not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--main-text-color);
+    height: 400px;
+    width: 100%;
+    background: radial-gradient(ellipse at bottom, var(--highlight-color-alpha) 0%, var(--main-bg-color) 100%);
+    outline: 1px solid var(--main-outline-color);
+    border-radius: 25px;
+    margin-top: 20px;
+    h1 {
+        font-size: 30px;
+    }
+    p {
+        font-size: 18px;
+        margin-top: 10px;
+        color: var(--sub-text-color)
+    }
+}
 .user-post {
     .post {
         cursor: default;
@@ -332,6 +383,7 @@ const createReply = async () => {
     form {
         display: flex;
         width: 100%;
+        align-items: center;
         input {
             width: 100%;
             font-size: 18px;

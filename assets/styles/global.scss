@@ -13,7 +13,7 @@
     --sub-text-color: #C5C8BA;
     --sub-text-color-hover: #000000;
     --main-color: #1d2024;
-    --main-color-alpha: rgba(29, 32, 36, 0.8) ;
+    --main-color-alpha: rgba(29, 32, 36, 0.8);
     --sub-color-alpha: rgba(29, 32, 36, 0.8);
     --sub-color: #272b30;
     --main-outline-color: #42474e;
@@ -21,9 +21,8 @@
     --highlight-color: #53ff78;
     --highlight-color-alpha: #2d3d34;
     --highlight-color-sub: #7a7a7a;
-    --error: #e04a4a;
-    --invert: 0;
-    }
+    --invert: 0;    
+}
 
 body {
     background-color: var(--main-bg-color);
@@ -40,7 +39,9 @@ h1 {
 p {
     font-size: 16px;
 }
-
+.material-symbols-rounded {
+    user-select: none;
+}
 #app {
     #wall-content {
         display: flex;
@@ -102,6 +103,17 @@ p {
     }
     &:last-child {
         margin-bottom: 20px;
+    }
+    .splittedForm {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        .button {
+            margin-left: 10px;
+            margin-top: 0;
+            width: 30%;
+            height: 100%;
+        }
     }
 }
 

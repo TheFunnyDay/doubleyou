@@ -1,4 +1,6 @@
 <script setup>
+const openModal = ref(false);
+const router = useRouter();
 const props = defineProps({
     title: {
         type: String,
@@ -6,21 +8,29 @@ const props = defineProps({
         default: 'Главная'
     }
 })
-
 const toggleMobileMenu = () => {
     document.querySelector("#left").classList.toggle('mobile-menu');
+    openModal.value = !openModal.value
+}
+
+const goBack = () => {
+    router.back();
 }
 </script>
 
 <template>
     <div id="header">
-        <img 
-            src="/icons/Menu.png" 
-            alt="menu"
+        <span 
+            v-if="router !== null && router.currentRoute.value.path !== '/'"
             id="mobile-menu-icon"
-            height="27" 
-            @click="toggleMobileMenu"
-        >
+            class="material-symbols-rounded" 
+            @click="goBack()">arrow_back_ios</span>
+        <span 
+            v-else
+            id="mobile-menu-icon"
+            class="material-symbols-rounded"
+            @click="toggleMobileMenu()"
+        >menu</span>
         <h1 id="header-title">{{ (props.title || 'Главная') }}</h1>
     </div>    
 </template>
@@ -44,7 +54,9 @@ const toggleMobileMenu = () => {
     #mobile-menu-icon {
         filter: invert(var(--invert));
         cursor: pointer;
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
         position: relative;
         width: 0;
         left: -50px;
@@ -53,7 +65,7 @@ const toggleMobileMenu = () => {
         transition-delay: filter .5s;
         @media (max-width: 633px) {
             left: 0;
-            width: auto;
+            padding-inline: 15px;
         }
         &:active {
             filter: invert(.5)
@@ -71,6 +83,6 @@ const toggleMobileMenu = () => {
     }
 }
 .mobile-menu {
-    flex : 1 1 80px !important;
+    flex : 1 1 90px !important;
 }
 </style>

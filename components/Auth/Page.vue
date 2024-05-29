@@ -35,7 +35,12 @@ const handleSingUp = async () => {
 
         if (error) throw error
     } catch (error) {
-        alert(error.error_description || error.message)
+        if (error.status === 422) {
+            alert("Эта почта уже используется")
+        }
+        if (error.status === 500) {
+            alert("Пользователь с таким никнеймом уже существует")
+        }
     } finally {
         loading.value = false
     }
@@ -52,7 +57,9 @@ const handleLogin = async () => {
         )
         if (error) throw error
     } catch (error) {
-        alert(error.error_description || error.message)
+        if (error.status === 400) {
+            alert("Неверная почта или пароль")
+        }
     } finally {
         loading.value = false;
     }

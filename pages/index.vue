@@ -13,7 +13,7 @@ useSeoMeta({
 
 const feedType = ref('all'); 
 
-// Fetch user's following list
+// Получить список подписок пользователя
 let { data: profile } = await supabase
     .from('profiles')
     .select('following')
@@ -39,6 +39,7 @@ const { data: posts, refresh } = await useAsyncData('posts', async () => {
     `)
     .order('created_at', { ascending: false });
 
+    //Фильтрация постов по подпискам
     if (feedType.value === 'following' && profile) {
         query = query.in('author_id', profile.following); 
     }
@@ -47,6 +48,9 @@ const { data: posts, refresh } = await useAsyncData('posts', async () => {
     return data;
 });
 
+//Функция обновления типа постов (Все Посты/Постов по подпискам)
+//Существует два типа 'all' и 'following', если попытаться... 
+//...получить посты другого типа, то ничего не вернет
 const switchFeed = async (type) => {
     feedType.value = type;
     await refresh();
@@ -72,9 +76,7 @@ const createPost = async () => {
     post_text.value = '';
     post_image.value = '';
     
-    setTimeout(() => {
-        location.reload();
-    }, 1500)
+    await refresh();
     return data;
 };
 

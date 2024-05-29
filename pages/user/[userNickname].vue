@@ -5,6 +5,8 @@ import { useRoute } from 'vue-router';
 const supabase = useSupabaseClient();
 const route = useRoute();
 const checkUser = useSupabaseUser();
+const error = useError();
+
 const authUserId = checkUser.value.id;
 const isFollowing = ref(false);
 const showButton = ref(false);
@@ -106,6 +108,7 @@ onMounted(async () => {
     </div>
     <div id="wall-content" v-else>
         <Header :title="user.nickname ? user.nickname : 'Пользователь'" />
+        <div v-if="error">ПИЗДЕЦ</div>
         <div id="user-info" style="color: white" >
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
