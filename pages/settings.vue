@@ -60,6 +60,39 @@ const handleUserMetaUpdate = async () => {
     }
 }
 
+const uploadUserAvatar = async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    try {
+        const { data, error } = await supabase.storage
+            .from('account_files')
+            .upload(`${Math.random().toFixed(10) * 1000}-${user.value.id}-avatar`, file, {
+                upsert: false,
+            })
+        if (error) throw error
+        console.log(data.fullPath)
+        userAvatar.value = `https://hathjgjcdclbalrbeeja.supabase.co/storage/v1/object/public/${data.fullPath}`
+    } catch (error) {
+        alert("Файл слишком большой")
+    }
+}
+
+const uploadUserCover = async (event) => {
+    const file = event.target.files[0]
+    if (!file) return
+    try {
+        const { data, error } = await supabase.storage
+            .from('account_files')
+            .upload(`${Math.random().toFixed(10) * 1000}-${user.value.id}-cover`, file, {
+                upsert: false,
+            })
+        if (error) throw error
+        console.log(data.fullPath)
+        userCover.value = `https://hathjgjcdclbalrbeeja.supabase.co/storage/v1/object/public/${data.fullPath}`
+    } catch (error) {
+        alert("Файл слишком большой. Максимальный размер - 2 МБ")
+    }
+}
 const updateUserEmail = async () => {
     try {
         const { data, error } = await supabase.auth.updateUser({
@@ -92,10 +125,16 @@ const updateUserPassword = async () => {
         <Loading v-if="!profile" />
         <div class="content" v-else>
             <h1>Настройки профиля</h1>
-            <div id="cover-setting" class="main-margin" :style="'background-image: url(' + profile.cover_url + ')'"></div>
             <div class="main-margin" id="profile-setting">
-                <div id="user-avatar-setting">
-                    <div id="user-avatar" :style="'background-image: url(' + profile.avatar_url + ')'"></div>
+                <div class="user-preview-images">
+                    <div id="user-avatar" :style="'background-image: url(' + userAvatar + ')'">
+                        <label for="avatar-input"><p>Изменить</p></label>
+                        <input type="file" name="" id="avatar-input" @change="uploadUserAvatar" style="display: none" />
+                    </div>
+                    <div id="cover-setting" class="main-margin" :style="'background-image: url(' + userCover + ')'">
+                        <label for="cover-input"><p>Изменить</p></label>
+                        <input type="file" name="" id="cover-input" @change="uploadUserCover" style="display: none" />
+                    </div>
                 </div>
                 <div id="settings-section">
                     <form @submit.prevent="handleUserMetaUpdate">
@@ -105,10 +144,6 @@ const updateUserPassword = async () => {
                         <input type="text" name="" v-model="userNickname" class="main-input" />
                         <!-- <p class="main-margin">Почта</p>
                         <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/> -->
-                        <p class="main-margin">Аватарка</p>
-                        <input type="text" name="" v-model="userAvatar" class="main-input" />
-                        <p class="main-margin">Обложка</p>
-                        <input type="text" name="" v-model="userCover" class="main-input" />
                         <input type="submit" :disabled="disabledSave"  value="Сохранить" class="button main-margin">
                     </form>
                         
@@ -140,20 +175,6 @@ const updateUserPassword = async () => {
                 <div class="button" style="background-color: #fff; color: black" @click="setTheme(whiteTheme)">Светлая</div>
             </div>
         </div>
-        <DevOnly>
-            <div class="content">
-                <h1>Dev</h1>
-                user id: {{ user.id }} <br>
-                user email: {{ user.email }} <br>
-                user nickname: {{ user.user_metadata.nickname }} <br>
-                user fullname: {{ user.user_metadata.fullname }} <br>
-                user avatar: <a style="color: var(--highlight-color)" :href="user.user_metadata.avatar_url" target="_blank"> {{ user.user_metadata.avatar_url }}</a> <br>
-                user cover:  <a style="color: var(--highlight-color)" :href="user.user_metadata.cover_url" target="_blank"> {{ user.user_metadata.cover_url }}</a> <br>
-                user created at: {{ user.created_at.substring(0, 10) }} <br>
-                user updated at: {{ user.updated_at.substring(0, 10) }} <br>
-                user last sign in: {{ user.last_sign_in_at.substring(0, 10) }} <br>
-            </div>
-        </DevOnly>
     </div>    
 </template>
 
@@ -164,52 +185,70 @@ const updateUserPassword = async () => {
         h1 {
             margin-bottom: 20px;
         }
-        #cover-setting {
-            width: 100%;
-            height: 200px;
-            background-image: url('https://wallpaperaccess.com/full/723583.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            border-radius: 25px;
-        }
         #profile-setting {
+            label {
+                opacity: 0;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: 100%;
+                transition: .2s;
+                p {
+                    color: var(--main-text-color);
+                }
+                &:hover {
+                    opacity: 1;
+                    background-color: var(--main-color-alpha);
+                }
+            }
             padding-inline: 20px;
             display: flex;
-            flex-direction: row;
-            justify-content: space-between;
+            flex-direction: column;
             @media (max-width: 633px) {
-                position: relative;
                 flex-direction: column;
-                align-items: center;
-                bottom: 100px;
             }
-            #settings-section {
-                width: 65%;
-                @media (max-width: 633px) {
-                    width: 100%;
-                }
-            }
-            #user-avatar-setting {
+            .user-preview-images {
                 display: flex;
-                position: relative;
-                bottom: 100px;
-                flex-direction: column;
-                align-items: center;
-                @media (max-width: 633px) {
-                    bottom: 0px;
-                }
+                flex-direction: column-reverse;
+                align-items: flex-start;
                 #user-avatar {
+                    position: absolute;
+                    transform: translateY(50px) translateX(25px);
+                    z-index: 2;
+                    overflow: hidden;
+                    flex-shrink: 0;
+                    margin-right: 10px;
                     outline: 2px solid var(--main-outline-color);
                     border-radius: 100%;
-                    width: 150px;
-                    height: 150px;
+                    width: 140px;
+                    height: 140px;
                     background-color: var(--main-bg-color);
                     background-size: cover;
                     background-position: center;
                     background-repeat: no-repeat;
                 }
+                #cover-setting {
+                    overflow: hidden;
+                    width: 100%;
+                    height: 200px;
+                    background-image: url('https://wallpaperaccess.com/full/723583.jpg');
+                    background-size: cover;
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    border-radius: 25px;
+                }
             }
+            #settings-section {
+                margin-top: 50px;
+                width: 100%;
+                @media (max-width: 633px) {
+                    width: 100%;
+                }
+            }
+ 
         }
         .color-setup {
             display: flex;

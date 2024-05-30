@@ -4,9 +4,7 @@ export default defineNuxtConfig({
     css: [
         '~/assets/styles/global.scss',
     ],
-    modules: [
-        '@nuxtjs/supabase',
-    ],
+    modules: ['@nuxtjs/supabase', "@nuxt/image"],
     supabase: {
         redirect: false,
         redirectOptions: {

@@ -238,7 +238,7 @@ const createReply = async () => {
             <div class="post-content">
                 <p class="post-text" v-if="post.post_text !== null" v-text="post.post_text"></p>
                 <span class="post-image" v-if="post.post_image !== null" @click="ToggleView()">
-                    <img :src="post.post_image">
+                    <img :src="post.post_image" style="cursor: pointer;">
                 </span>
             </div>
             <div class="post-footer" style="justify-content: space-between;">

@@ -4,8 +4,7 @@ const supabase = useSupabaseClient();
 const post_text = ref('')
 const post_image = ref('')
 const userAvatar = user.value.user_metadata.avatar_url
-
-
+const fullPathToImage = ref('');  
 const preLoad = ref(true)
 useSeoMeta({
     title: 'Главная страница | W',
@@ -57,6 +56,40 @@ const switchFeed = async (type) => {
     preLoad.value = false
 };
 
+
+const uploadImage = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    try {
+        const { data, error } = await supabase.storage
+            .from('public_storage')
+            .upload(`${Date.now()}-${file.name}`, file, {
+                cacheControl: '3600',
+                upsert: true,
+            });
+        if (error) throw error;
+        // alert(error.description);
+        console.log(data);
+        fullPathToImage.value = data.path;
+        console.log(fullPathToImage.value);
+        post_image.value = `https://hathjgjcdclbalrbeeja.supabase.co/storage/v1/object/public/${data.fullPath}`;
+    } catch (error) {
+        if (error.statusCode == 413) {
+            alert('Файл слишком большой. Максимальный размер - 4 МБ');
+        }
+    }
+}
+
+const removeImage = () => {
+    const { data, error } = supabase.storage
+        .from('public_storage')
+        .remove([fullPathToImage.value]);
+    if (error) throw error;
+    fullPathToImage.value = null;
+    console.log(data);
+    post_image.value = '';
+
+}
 const createPost = async () => {
     if (user === null) throw new Error('Пользователь не найдет');
     if ((!post_text.value || !post_text.value.trim()) && (!post_image.value || !post_image.value.trim())) {
@@ -128,26 +161,50 @@ const handleLike = async (post) => {
         <Header title="Главная" />
 
         <div id="create-content">
-            
+
             <div class="avatar" :style="'background-image: url(' + userAvatar + ')'"></div>
             <form @submit.prevent="createPost">
                 <textarea placeholder="Что нового?" maxlength="263" type="text" v-model="post_text"></textarea>
-                <div id="progress" style="height: 5px; border-radius: 10px; margin-top: 5px; transition: .2s; background-color: var(--highlight-color);" 
-                :style="{
+                <div class="post-filePreview" v-if="post_image">
+                    <NuxtImg :src="post_image" style="    
+                            width: 100%;
+                            object-fit: contain;
+                            max-height: 500px;
+                            background-color: var(--main-bg-color);
+                            border-radius: 25px;
+                            margin-top: 25px;
+                            margin-bottom: 10px;
+                            outline: 1px solid var(--main-outline-color);
+                            " />
+                </div>
+                <div id="progress"
+                    style="height: 5px; border-radius: 10px; margin-top: 5px; transition: .2s; background-color: var(--highlight-color);"
+                    :style="{
                     width: 0 + (post_text.length / 263 * 100 + '%'),
                     background: ( post_text.length > 132 && post_text.length < 263) ? 'orange' : post_text.length === 263 ? 'red' : 'var(--highlight-color)'
                 }">
-            </div>
+                </div>
                 <div id="post-input-container">
                     <div id="post-char-counter" style="max-width: 100px;">
                         <p
-                            :style="{ color: ( post_text.length > 132 && post_text.length < 263) ? 'orange' : post_text.length === 263 ? 'red' : 'var(--main-text-color)'}"
-                        >{{ post_text.length > 0 ? ( 263 - post_text.length ) : '' }}</p>
+                            :style="{ color: ( post_text.length > 132 && post_text.length < 263) ? 'orange' : post_text.length === 263 ? 'red' : 'var(--main-text-color)'}">
+                            {{ post_text.length > 0 ? ( 263 - post_text.length ) : '' }}</p>
                     </div>
                     <div style="display: flex;">
                         <div class="post-input-button">
-                            <input id="post-add-image" class="main-input" v-model="post_image"
-                                placeholder="Ссылка на картинку" style="text-align: center;" />
+                            <span class="material-symbols-rounded"
+                                v-if="post_image"
+                                @click="removeImage"
+                                style="font-size: 35px;"
+                            >
+                                delete
+                            </span>
+                        </div>
+                        <div class="post-input-button">
+                            <label for="upload-image"><span class="material-symbols-rounded">
+                                    image
+                                </span></label>
+                            <input id="upload-image" class="button" type="file" accept="image/jpg, image/png, image/jpeg, image/gif, image/webp" @change="uploadImage">
                         </div>
                         <div class="post-input-button">
                             <input class="button" type="submit" value="Опубликовать">
@@ -157,26 +214,20 @@ const handleLike = async (post) => {
             </form>
         </div>
         <div id="feed-type">
-            <button 
-                @click="switchFeed('all')"
+            <button @click="switchFeed('all')"
                 :style="{ backgroundColor: feedType === 'all' ? 'var(--highlight-color)' : '', color: feedType === 'all' ? 'var(--sub-text-color-hover)' : '' }"
-                :disabled="feedType === 'all'"
-                >
-                    Все посты
+                :disabled="feedType === 'all'">
+                Все посты
             </button>
-            <button 
-                @click="switchFeed('following')"
+            <button @click="switchFeed('following')"
                 :style="{ backgroundColor: feedType === 'following' ? 'var(--highlight-color)' : '', color: feedType === 'following' ? 'var(--sub-text-color-hover)' : ''  }"
-                :disabled="feedType === 'following'"
-                >
-                    Подписки
+                :disabled="feedType === 'following'">
+                Подписки
             </button>
         </div>
         <Loading v-if="!posts" />
-        <div id="posts" 
-            v-else-if="posts && posts.length === 0"
-            style="display: flex; justify-content: center; align-items: center; flex-direction: column;height: 10vh;"
-        >
+        <div id="posts" v-else-if="posts && posts.length === 0"
+            style="display: flex; justify-content: center; align-items: center; flex-direction: column;height: 10vh;">
             <h1>Тут ничего нет...</h1>
         </div>
         <div id="posts" v-else>
@@ -231,7 +282,8 @@ const handleLike = async (post) => {
                 </div>
                 <div class="post-footer">
                     <div class="post-likes">
-                        <span class="material-symbols-rounded likes-button" @click="postLike(post.id); handleLike(post)"> favorite </span>
+                        <span class="material-symbols-rounded likes-button"
+                            @click="postLike(post.id); handleLike(post)"> favorite </span>
                         <div class="likes-count" v-text="post.likes_count"></div>
                     </div>
                     <div class="post-comments" @click="$router.push('/post/' + post.id)">
@@ -288,7 +340,18 @@ const handleLike = async (post) => {
                 justify-content: space-between;
                 align-items: center;
                 margin-top: 18px;
-
+                label {
+                    span {
+                        cursor: pointer;
+                        color: var(--main-text-color);
+                        font-size: 35px;
+                        font-weight: 500;
+                        user-select: none;
+                    }
+                }
+                #upload-image {
+                    display: none;
+                }
                 #post-add-image {
                     cursor: default;
                     width: 40px;
@@ -311,6 +374,14 @@ const handleLike = async (post) => {
 
                     &:not(:first-child) {
                         margin-left: 10px;
+                    }
+                }
+                .material-symbols-rounded {
+                    cursor: pointer;
+                    font-size: 35px;
+                    transition: .3s color;
+                    &:hover {
+                        color: var(--highlight-color);
                     }
                 }
             }
