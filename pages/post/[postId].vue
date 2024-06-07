@@ -126,6 +126,7 @@ const deletePost = async () => {
         if (error) throw error;
         setTimeout(() => {
             alert("Публикация удалена")
+            navigateTo('/')
         }, 1500)
         return data;
     }
