@@ -4,6 +4,7 @@
     });
 
     const supabase = useSupabaseClient();
+    const searchQuery = ref('');
 
     const { data: profiles } = await useAsyncData('profiles', async () => {
         let { data, error } = await supabase
@@ -12,15 +13,25 @@
         if (error) throw error
         return data
     })
+    // Вычисляемое свойство для фильтрации пользователей
+const filteredProfiles = computed(() => {
+    if (!profiles.value) return [];
+    const searchLower = searchQuery.value.toLowerCase();
+    return profiles.value.filter(profile => 
+        profile.nickname.toLowerCase().includes(searchLower) || 
+        profile.fullname.toLowerCase().includes(searchLower)
+    );
+});
+
 </script>
 
 <template>
     <div id="wall-content">
             <Header title="Пользователи"/>
             <div id="user-list-con">
-                <input type="text" placeholder="Поиск пользователя" id="users-search" />
+                <input type="text" placeholder="Поиск пользователя" id="users-search" v-model="searchQuery"/>
                 <Loading v-if="!profiles || profiles.length === 0"/>
-                <div class="user-in-list" v-for="profile in profiles" :key="profile.id" v-else>
+                <div class="user-in-list" v-for="profile in filteredProfiles" :key="profile.id" v-else>
                 <NuxtLink :to="'/user/' + profile.nickname">
                     <div class="user-cover" 
                     :style="'background-image: url(' + profile.cover_url + ')'"

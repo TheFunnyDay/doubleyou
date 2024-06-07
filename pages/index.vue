@@ -37,12 +37,10 @@ const { data: posts, refresh } = await useAsyncData('posts', async () => {
         )
     `)
     .order('created_at', { ascending: false });
-
     //Фильтрация постов по подпискам
     if (feedType.value === 'following' && profile) {
         query = query.in('author_id', profile.following); 
     }
-
     const { data } = await query;
     return data;
 });
@@ -91,7 +89,7 @@ const removeImage = () => {
 
 }
 const createPost = async () => {
-    if (user === null) throw new Error('Пользователь не найдет');
+    if (user === null) throw new Error('Пользователь не найден');
     if ((!post_text.value || !post_text.value.trim()) && (!post_image.value || !post_image.value.trim())) {
         alert("Пост не может быть пустым")
         return false;
@@ -108,7 +106,6 @@ const createPost = async () => {
     if (error) throw error;
     post_text.value = '';
     post_image.value = '';
-    
     await refresh();
     return data;
 };
@@ -175,7 +172,8 @@ const handleLike = async (post) => {
                             margin-top: 25px;
                             margin-bottom: 10px;
                             outline: 1px solid var(--main-outline-color);
-                            " />
+                            " 
+                            />
                 </div>
                 <div id="progress"
                     style="height: 5px; border-radius: 10px; margin-top: 5px; transition: .2s; background-color: var(--highlight-color);"

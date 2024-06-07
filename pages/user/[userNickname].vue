@@ -38,6 +38,10 @@ const { data: user } = await supabase
     .eq('nickname', route.params.userNickname)
     .single();
 
+if (!user) {
+    error.value = 'Пользователь не найден';
+}
+
 // console.log('user', user)
 const { data: posts } = await supabase.from('posts')
     .select(`
@@ -108,8 +112,8 @@ onMounted(async () => {
     </div>
     <div id="wall-content" v-else>
         <Header :title="user.nickname ? user.nickname : 'Пользователь'" />
-        <div v-if="error">ПИЗДЕЦ</div>
-        <div id="user-info" style="color: white" >
+        <div v-if="error">Ошибка получения пользователя</div>
+        <div id="user-info" style="color: white" v-else-if="user">
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
                 <div id="userAvatar" :style="[
@@ -150,12 +154,12 @@ onMounted(async () => {
                 <div class="user-switch-to">
                     <span>Посты</span>
                 </div>
-                <div class="user-switch-to">
+                <!-- <div class="user-switch-to">
                     <span>Лайки</span>
                 </div>
                 <div class="user-switch-to">
                     <span>Ответы</span>
-                </div>
+                </div> -->
             </div>
             <div id="user-no-posts" v-if="!posts.length">
                 У пользователя {{ user.fullname }}  нет никаких публикаций

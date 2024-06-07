@@ -37,7 +37,7 @@ const userEmail = ref(user.value.email);
 const userPassword = ref(null);
 const handleUserMetaUpdate = async () => {
     try {
-            const { data, error } = await supabase.auth.updateUser({
+        const { data, error } = await supabase.auth.updateUser({
         data: {
             fullname: userFullname.value,
             nickname: userNickname.value,
@@ -129,7 +129,7 @@ const updateUserPassword = async () => {
                 <div class="user-preview-images">
                     <div id="user-avatar" :style="'background-image: url(' + userAvatar + ')'">
                         <label for="avatar-input"><p>Изменить</p></label>
-                        <input type="file" name="" id="avatar-input" @change="uploadUserAvatar" style="display: none" />
+                        <input type="file" name="" id="avatar-input" @change="uploadUserAvatar" style="display: none"  accept="image/jpg, image/png, image/jpeg, image/gif, image/webp"/>
                     </div>
                     <div id="cover-setting" class="main-margin" :style="'background-image: url(' + userCover + ')'">
                         <label for="cover-input"><p>Изменить</p></label>

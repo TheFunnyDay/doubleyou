@@ -32,7 +32,6 @@ const handleSingUp = async () => {
                 }
             }
         )
-
         if (error) throw error
     } catch (error) {
         if (error.status === 422) {
@@ -45,7 +44,7 @@ const handleSingUp = async () => {
         loading.value = false
     }
 }
-// console.log(window.location.hostname)
+
 const handleLogin = async () => {
     try {
         loading.value = true
@@ -88,7 +87,6 @@ const handleForgotPassword = async () => {
 }
 const loginBg = ref('');
 onMounted(() => {
-//Never mind
 const bgImages = ['login-bg.jpg', 'login-bg2.jpg', 'login-bg3.jpg', 'login-bg4.jpg', 'login-bg5.jpg', 'login-bg6.jpg', 'login-bg7.jpg', 'login-bg8.jpg', 'login-bg9.jpg', 'login-bg10.jpg', 'login-bg11.jpg'];
     const randomImage = bgImages[Math.floor(Math.random() * bgImages.length)];
     loginBg.value = `url('${randomImage}')`;
