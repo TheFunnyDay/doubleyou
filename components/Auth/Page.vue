@@ -71,7 +71,7 @@ const handleForgotPassword = async () => {
             email: email.value,
             options: {
                 shouldCreateUser: false,
-                emailRedirectTo: `http://${window.location.hostname}:3000/settings`,
+                emailRedirectTo: `http://${window.location.hostname}/settings`,
             },
         })
         togglePopup.value = !togglePopup.value
