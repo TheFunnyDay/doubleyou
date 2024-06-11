@@ -188,13 +188,9 @@ const createReply = async () => {
             :postText="posts[0].post_text" />
         <Header title="Пост" />
         <Loading v-if="!posts" />
-        <div v-if="posts.length === 0" class="post-not-found">
+        <div v-if="posts.length === 0 || posts === null" class="post-not-found">
             <h1>Публикация недоступна</h1>
             <p>Публикация была удалена или не существует</p>
-        </div>
-        <div v-if="posts === null" class="post-not-found">
-            <h1>Ошибка получения публикации с сервера</h1>
-            <p>Вы будете перенаправлены на главную страницу</p>
         </div>
         <div class="post" v-for="post in posts" :key="post.id" v-else>
             <div class="user-info-container">

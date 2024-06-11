@@ -17,17 +17,15 @@ const setTheme = (theme) => {
     document.querySelector("html").style.cssText = theme;
 }
 
-const { data: profile } = await useAsyncData('profiles', async () => {
-    const { data } = await supabase
-        .from('profiles')
-        .select(`
-            "avatar_url",
-            "cover_url"
-        `)
-        .eq("id", user.value.id)
-        .single();
-    return data;
-});
+
+const { data: profile } = await supabase
+    .from('profiles')
+    .select(`
+        "role"
+    `)
+    .eq("id", user.value.id)
+    .single();
+
 
 const userNickname = ref(user.value.user_metadata.nickname);
 const userFullname  = ref(user.value.user_metadata.fullname);
@@ -174,6 +172,11 @@ const updateUserPassword = async () => {
                 <div class="button" style="background-color: rgb(28, 28, 28); color: white" @click="setTheme(darkTheme)">Темная</div>
                 <div class="button" style="background-color: #fff; color: black" @click="setTheme(whiteTheme)">Светлая</div>
             </div>
+        </div>
+        <div class="content" v-if="profile.role === 'admin'">
+            <h1>Вы являетесь администратором</h1>
+            <p >И вы можете перейти в админ панель</p>
+            <div class="button" @click="$router.push('/admin')" style="margin-top: 20px;">Перейти</div>
         </div>
     </div>    
 </template>

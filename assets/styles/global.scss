@@ -151,6 +151,7 @@ p {
     color: var(--main-text-color);
     font-size: 16px;
     transition: .3s background-color, .3s color;
+    border-radius: 25px;
     &:hover {
         background-color: var(--highlight-color);
         color: var(--sub-text-color-hover);

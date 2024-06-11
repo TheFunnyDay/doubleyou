@@ -42,7 +42,7 @@ if (!user) {
     error.value = 'Пользователь не найден';
 }
 
-// console.log('user', user)
+
 const { data: posts } = await supabase.from('posts')
     .select(`
         id,
@@ -92,6 +92,48 @@ const subscribe = async () => {
     } catch (error) {
         console.error('Error subscribing:', error);
     }
+};
+
+const postLike = async (id) => {
+    const { data: postData, error: fetchError } = await supabase
+        .from('posts')
+        .select('likes_count, users_who_liked')
+        .eq('id', id)
+        .single();
+
+    if (fetchError) {
+        throw fetchError;
+    }
+    const usersWhoLiked = postData.users_who_liked ? JSON.parse(postData.users_who_liked) : [];
+
+    const userIndex = usersWhoLiked.indexOf(authUserId);
+
+    if (userIndex === -1) {
+        usersWhoLiked.push(authUserId);
+    } else {
+        usersWhoLiked.splice(userIndex, 1);
+    }
+
+    const updatedLikesCount = usersWhoLiked.length;
+
+    const updatedData = await supabase
+        .from('posts')
+        .update({
+            likes_count: updatedLikesCount,
+            users_who_liked: JSON.stringify(usersWhoLiked),
+        })
+        .eq('id', id)
+        .single();
+
+    if (updatedData.error) {
+        throw updatedData.error;
+    }
+
+    return updatedLikesCount;
+};
+
+const handleLike = async (post) => {
+    post.likes_count = await postLike(post.id);
 };
 onMounted(async () => {
     const { data: existingFollowing } = await supabase
@@ -154,12 +196,6 @@ onMounted(async () => {
                 <div class="user-switch-to">
                     <span>Посты</span>
                 </div>
-                <!-- <div class="user-switch-to">
-                    <span>Лайки</span>
-                </div>
-                <div class="user-switch-to">
-                    <span>Ответы</span>
-                </div> -->
             </div>
             <div id="user-no-posts" v-if="!posts.length">
                 У пользователя {{ user.fullname }}  нет никаких публикаций
