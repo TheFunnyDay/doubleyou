@@ -158,7 +158,8 @@ onMounted(async () => {
         <div id="user-info" style="color: white" v-else-if="user">
             <div id="user-cover" :style="'background-image: url(' + (user.cover_url ? user.cover_url : '') + ')'"></div>
             <div id="user-main-info">
-                <div id="userAvatar" :style="[
+                <div id="userAvatar" :class="user.is_premium ? 'premium' : ''" 
+                    :style="[
                         { backgroundImage: 'url(' + user.avatar_url + ')' },
                         [user.is_premium ? ('outline: 2px solid var(--highlight-color)') : 'outline: 2px solid var(--main-outline-color)']
                     ]">
