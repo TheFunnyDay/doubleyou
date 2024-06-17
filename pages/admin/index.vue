@@ -6,11 +6,11 @@ const supabase = useSupabaseClient();
 const post_id = ref('');
 const postPreview = ref({});
 const userPreview = ref({});
-
 const usersList = ref([]);
 const selectedUserId = ref(null);
 
-const userAvatar = user.value.user_metadata.avatar_url;
+
+
 
 const { data: checkAdminStatus } = await supabase
     .from('profiles')

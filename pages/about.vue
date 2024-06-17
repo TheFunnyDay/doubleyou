@@ -13,9 +13,10 @@ onMounted(() => {
 <template>
     <div id="wall-content">
         <Header title="О проекте"/>
-        <div class="content about-bg" :style="{ backgroundImage: loginBg }" style="padding: 0;">
+        <div class="content about-bg" :style="{ backgroundImage: loginBg }" style="padding: 0; overflow: hidden;">
             <div style="display: flex; align-items: center;">
-                <img src="/doubleyou-logo-white.png">
+                <video src="/about-video.mp4" playsinline autoplay muted loop style="width: 100%;"></video>
+
             </div>
         </div>
         <div class="content">

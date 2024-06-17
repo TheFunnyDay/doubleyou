@@ -64,7 +64,6 @@ const uploadImage = async (event) => {
                 upsert: true,
             });
         if (error) throw error;
-        // alert(error.description);
         console.log(data);
         fullPathToImage.value = data.path;
         console.log(fullPathToImage.value);

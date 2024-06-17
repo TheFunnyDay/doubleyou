@@ -140,8 +140,6 @@ const updateUserPassword = async () => {
                         <input type="text" name="" v-model="userFullname" class="main-input" />
                         <p class="main-margin">Никнейм</p>
                         <input type="text" name="" v-model="userNickname" class="main-input" />
-                        <!-- <p class="main-margin">Почта</p>
-                        <input type="email" name="" id="" class="main-input not-available" disabled="true" :value="user.email" style="user-select:  none; pointer-events:none"/> -->
                         <input type="submit" :disabled="disabledSave"  value="Сохранить" class="button main-margin">
                     </form>
                         
