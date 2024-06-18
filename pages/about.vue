@@ -15,7 +15,7 @@ onMounted(() => {
         <Header title="О проекте"/>
         <div class="content about-bg" :style="{ backgroundImage: loginBg }" style="padding: 0; overflow: hidden;">
             <div style="display: flex; align-items: center;">
-                <video src="/about-video.mp4" playsinline autoplay muted loop style="width: 100%;"></video>
+                <video src="/about-video.mp4" playsinline autoplay muted style="width: 100%;"></video>
 
             </div>
         </div>
@@ -48,6 +48,11 @@ onMounted(() => {
             <h1>Но, как и у всего, есть свое НО.</h1>
             <p>Все это будет реализовавыться не раньше чем через 1 год по предвиденным (непредвиденным) причинам.</p>
         </div>
+        <div class="content">
+            <h1>Контакты</h1>
+            <p>Автор проекта: <a href="https://github.com/thefunnyday" target="_blank">Никита Голубев</a></p>
+            <p>По вопросам или жалобам: <a href="https://t.me/thefunnyday" target="_blank">Телеграм</a> | <a href="mailto:doubleyouforall@ya.ru">doubleyouforall@ya.ru</a></p>
+        </div>
     </div>
 </template>
 
@@ -60,6 +65,9 @@ onMounted(() => {
     li {
         margin-top: 10px;
         margin-left: 25px;
+    }
+    a {
+        color: var(--highlight-color);
     }
 }
 .about-bg {
