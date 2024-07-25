@@ -51,8 +51,7 @@ onMounted(() => {
         <div class="content">
             <h1>Инфо</h1>
             <p>Автор проекта: <a href="https://github.com/thefunnyday" target="_blank">Никита Голубев</a></p>
-            <p>По вопросам или жалобам: <a href="https://t.me/thefunnyday" target="_blank">Телеграм</a> | <a href="mailto:doubleyou-help@mail.ru">doubleyou-help@mail.ru</a></p>
-            <p><a target="_blank" href="https://cloud.mail.ru/public/hsHY/dJfuyq9gW">политика обработки персональных данных</a> | <a target="_blank" href="https://cloud.mail.ru/public/EacB/LD2XfwLvR">пользовательское соглашение</a></p>
+            <p>По вопросам или жалобам: <a href="https://t.me/thefunnyday" target="_blank">Телеграм</a></p>
         </div>
     </div>
 </template>

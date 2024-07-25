@@ -155,7 +155,6 @@ const selectNickname = (selectedNickname) => {
                                     :disabled="loading" />
                             </div>
                             <p class="isSingUp" @click="isSignUp = !isSignUp">Уже зарегистрированы? Войти</p>
-                            <p style="max-width: 473px; margin-top: 30px; color: gray">Нажимая на кнопку "Зарегистрироваться" Вы соглашаетесь с <a target="_blank" href="https://cloud.mail.ru/public/hsHY/dJfuyq9gW">политикой обработки персональных данных</a> и <a target="_blank" href="https://cloud.mail.ru/public/EacB/LD2XfwLvR">пользовательским соглашением</a></p>
                         </div>
                     </form>
                 </div>

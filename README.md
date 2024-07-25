@@ -1,6 +1,12 @@
-# Nuxt 3 Minimal Starter
+## Start
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+First, you need to create and provide a .env file.
+
+```bash
+SUPABASE_URL= "URL"
+SUPABASE_KEY= "Key"
+```
+
 
 ## Setup
 
