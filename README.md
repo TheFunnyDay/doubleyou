@@ -1,3 +1,7 @@
+# Warn !
+The project is not currently hosted, but you can view project screenshots here:
+[*CLICK*](https://ibb.co/album/cxNfBm)
+
 ## Start
 
 First, you need to create and provide a .env file.
